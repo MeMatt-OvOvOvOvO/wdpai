@@ -33,6 +33,12 @@ services:
       - .:/app
     networks:
       - pg-network
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: db
+      DB_USER: docker
+      DB_PASS: docker
   
   pgadmin:
     image: dpage/pgadmin4:latest

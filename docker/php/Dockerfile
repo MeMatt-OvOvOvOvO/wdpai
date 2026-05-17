@@ -29,7 +29,9 @@ RUN apk add --no-cache --virtual .build-deps $BUILD_DEPS \
 
 RUN apk add --no-cache --virtual .run-deps $RUN_DEPS
 
-RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
+RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini; \
+    echo 'session.save_path = /tmp' >> /usr/local/etc/php/conf.d/docker-php-session.ini; \
+    echo 'session.gc_maxlifetime = 3600' >> /usr/local/etc/php/conf.d/docker-php-session.ini;
 
 # Copy the application code
 COPY . /app
