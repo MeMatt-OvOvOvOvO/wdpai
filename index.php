@@ -6,7 +6,7 @@ declare(strict_types=1);
 // Bootstrap - ładowanie klas i konfiguracja
 // ============================================================
 
-session_start();
+// Sesja startuje przez SessionService (z flagami HttpOnly, SameSite)
 
 // Autoloader
 spl_autoload_register(function (string $className): void {
