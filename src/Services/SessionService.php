@@ -5,14 +5,19 @@ class SessionService
     public static function start(): void
     {
         if (session_status() === PHP_SESSION_NONE) {
+            // D3: cookie ma być Secure tylko na połączeniu HTTPS – inaczej
+            // przeglądarka w ogóle by go nie przesłała przy lokalnym dev po HTTP
+            $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+                || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+
             // C3, D3, E3: flagi bezpieczeństwa ciasteczka sesji
             session_set_cookie_params([
                 'lifetime' => 3600,
                 'path'     => '/',
                 'domain'   => '',
-                'secure'   => false, // zmień na true gdy HTTPS
-                'httponly' => true,  // C3: JS nie ma dostępu do cookie
-                'samesite' => 'Lax', // E3: ochrona przed CSRF
+                'secure'   => $isHttps, // D3: wysyłane tylko przez HTTPS, gdy dostępne
+                'httponly' => true,     // C3: JS nie ma dostępu do cookie
+                'samesite' => 'Lax',    // E3: ochrona przed CSRF
             ]);
             session_start();
         }
@@ -129,5 +134,61 @@ class SessionService
     public static function rotateCsrfToken(): void
     {
         self::set('csrf_token', bin2hex(random_bytes(32)));
+    }
+
+    // -------------------------------------------------------
+    // A4/E5: limit prób logowania / blokada czasowa
+    // -------------------------------------------------------
+
+    private const MAX_LOGIN_ATTEMPTS = 5;
+    private const LOCKOUT_SECONDS    = 300; // 5 minut
+
+    /**
+     * Zwraca liczbę sekund pozostałych do końca blokady, albo 0 jeśli konto
+     * (a właściwie ten adres email z tej przeglądarki) nie jest zablokowane.
+     */
+    public static function getLoginLockoutRemaining(string $email): int
+    {
+        self::start();
+        $key = 'login_lock_' . sha1(strtolower($email));
+        $lockedUntil = $_SESSION[$key]['locked_until'] ?? null;
+
+        if ($lockedUntil !== null && $lockedUntil > time()) {
+            return $lockedUntil - time();
+        }
+
+        // Blokada wygasła – wyczyść licznik, żeby zacząć od nowa
+        if ($lockedUntil !== null && $lockedUntil <= time()) {
+            unset($_SESSION[$key]);
+        }
+
+        return 0;
+    }
+
+    /**
+     * Rejestruje nieudaną próbę logowania. Po przekroczeniu progu
+     * MAX_LOGIN_ATTEMPTS uruchamia czasową blokadę formularza (A4).
+     */
+    public static function registerFailedLogin(string $email): void
+    {
+        self::start();
+        $key = 'login_lock_' . sha1(strtolower($email));
+
+        $attempts = ($_SESSION[$key]['attempts'] ?? 0) + 1;
+        $_SESSION[$key]['attempts'] = $attempts;
+
+        if ($attempts >= self::MAX_LOGIN_ATTEMPTS) {
+            $_SESSION[$key]['locked_until'] = time() + self::LOCKOUT_SECONDS;
+        }
+    }
+
+    /**
+     * Czyści licznik nieudanych prób po poprawnym logowaniu.
+     */
+    public static function clearLoginAttempts(string $email): void
+    {
+        self::start();
+        $key = 'login_lock_' . sha1(strtolower($email));
+        unset($_SESSION[$key]);
     }
 }
