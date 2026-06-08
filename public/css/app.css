@@ -765,10 +765,46 @@ img { max-width: 100%; display: block; }
   filter: grayscale(1) contrast(1.2);
   opacity: 0.35;
 }
+
+/* Żywa mapa operacyjna (Leaflet + OpenStreetMap, zob. app.js -> initOpsMap).
+   Kafelki OSM są "odwracane" filtrem CSS, dzięki czemu mapa wygląda spójnie
+   z ciemnym, taktycznym motywem aplikacji zamiast jaskrawej mapy w jasnych barwach. */
+.ops-map__leaflet {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--color-surface-mid);
+  z-index: 0;
+}
+.ops-map__leaflet .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.85) contrast(0.9) saturate(0.6);
+}
+.ops-map__leaflet .leaflet-control-attribution {
+  background: rgba(12, 14, 16, 0.75);
+  color: var(--color-text-dim, #9aa0a6);
+  font-size: 0.6rem;
+}
+.ops-map__leaflet .leaflet-control-attribution a {
+  color: var(--color-text-dim, #c7cbd1);
+}
+.ops-map__leaflet .leaflet-popup-content-wrapper,
+.ops-map__leaflet .leaflet-popup-tip {
+  background: rgba(18, 20, 22, 0.95);
+  color: #fff;
+  border: 1px solid var(--color-border-light);
+}
+.ops-map__leaflet .leaflet-popup-content a {
+  color: var(--color-primary);
+}
+
 .ops-map__overlay {
   position: absolute;
   inset: 0;
   background: linear-gradient(to top, var(--color-bg), transparent 60%);
+  /* Gradient jest czysto dekoracyjny - nie może blokować przeciągania/zoomowania mapy pod spodem */
+  pointer-events: none;
+  z-index: 1;
 }
 .ops-map__hud {
   position: absolute;
@@ -777,6 +813,14 @@ img { max-width: 100%; display: block; }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  /* Panel HUD wypełnia cały obszar mapy, ale ma być "przezroczysty" dla zdarzeń myszy poza
+     swoimi elementami - inaczej użytkownik nie mógłby przeciągać/przybliżać mapy pod spodem. */
+  pointer-events: none;
+  z-index: 2;
+}
+.ops-map__hud a,
+.ops-map__hud button {
+  pointer-events: auto;
 }
 .hud-panel {
   background: rgba(18,20,22,0.85);

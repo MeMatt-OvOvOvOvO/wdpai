@@ -190,6 +190,7 @@ class MissionController extends AppController
             'id'               => $m->getId(),
             'title'            => $m->getTitle(),
             'location'         => $m->getLocation(),
+            'coordinates'      => $m->getCoordinates(), // dla mapy Leaflet (lat,lng)
             'status'           => $m->getStatus(),
             'incident_type'    => $m->getIncidentTypeName(),
             'start_time'       => $m->getStartTime(),

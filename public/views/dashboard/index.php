@@ -54,9 +54,9 @@ ob_start();
       </div>
 
       <div class="ops-map">
-        <div style="width:100%;height:100%;background:linear-gradient(135deg,#1a1c1e 0%,#0c0e10 100%);display:flex;align-items:center;justify-content:center;">
-          <span class="material-symbols-outlined" style="font-size:4rem;opacity:0.1">map</span>
-        </div>
+        <!-- Mapa operacyjna (Leaflet + OpenStreetMap). Inicjalizowana w app.js (initOpsMap),
+             markery akcji ratunkowych są pobierane asynchronicznie przez Fetch API z /api/missions. -->
+        <div id="opsMap" class="ops-map__leaflet" role="img" aria-label="Mapa operacyjna sektora Tatr z lokalizacjami aktywnych akcji ratunkowych"></div>
         <div class="ops-map__overlay"></div>
         <div class="ops-map__hud">
           <div>

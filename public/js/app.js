@@ -97,15 +97,119 @@ document.addEventListener('DOMContentLoaded', () => {
       .catch(() => {});
   }
 
+  // 7. Live Operations Map (Leaflet + Fetch API) – tylko na dashboardzie
+  initOpsMap();
+
 });
 
-// 7. Confirm delete helper (called inline via onsubmit)
+// ============================================================
+// 7a. Live Operations Map – inicjalizacja mapy Leaflet osadzonej
+//     w panelu "Live Operations Map" na dashboardzie. Mapa jest
+//     wyśrodkowana na Tatrach, a aktywne akcje ratunkowe są pobierane
+//     asynchronicznie przez Fetch API z endpointu /api/missions
+//     i nanoszone jako kolorowe markery (kolor zależny od statusu akcji).
+// ============================================================
+
+function initOpsMap() {
+    const mapEl = document.getElementById('opsMap');
+
+    // Brak kontenera (inna strona) lub brak biblioteki Leaflet – nic nie rób.
+    if (!mapEl || typeof L === 'undefined') return;
+
+    const TATRA_CENTER = [49.2319, 19.9817]; // Kasprowy Wierch – środek sektora operacyjnego
+
+    const map = L.map(mapEl, {
+        zoomControl: true,
+        attributionControl: true,
+    }).setView(TATRA_CENTER, 12);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(map);
+
+    // Marker bazy dowodzenia TOPR
+    L.circleMarker(TATRA_CENTER, {
+        radius: 8,
+        color: '#ef4444',
+        fillColor: '#ef4444',
+        fillOpacity: 0.9,
+        weight: 2,
+    })
+        .addTo(map)
+        .bindPopup('<strong>Baza TOPR – Sektor 7</strong><br>Centrum dowodzenia (Kasprowy Wierch)');
+
+    const STATUS_COLORS = {
+        open: '#f59e0b',
+        active: '#ef4444',
+        completed: '#22c55e',
+        cancelled: '#6b7280',
+    };
+
+    // Pobierz listę akcji przez Fetch API (ten sam endpoint co lista akcji /missions)
+    // i nanieś na mapę te, które mają zapisane współrzędne (kolumna missions.coordinates).
+    fetch('/api/missions')
+        .then(res => res.json())
+        .then(missions => {
+            (missions || []).forEach(mission => {
+                const coords = parseCoordinates(mission.coordinates);
+                if (!coords) return;
+
+                const color = STATUS_COLORS[mission.status] || '#9ca3af';
+
+                L.circleMarker(coords, {
+                    radius: 7,
+                    color,
+                    fillColor: color,
+                    fillOpacity: 0.75,
+                    weight: 2,
+                })
+                    .addTo(map)
+                    .bindPopup(
+                        '<strong>' + escapeHtml(mission.title) + '</strong><br>' +
+                        escapeHtml(mission.location) + '<br>' +
+                        'Status: ' + escapeHtml(mission.status) + '<br>' +
+                        '<a href="/missions/' + encodeURIComponent(mission.id) + '">Szczegóły akcji →</a>'
+                    );
+            });
+        })
+        .catch(() => {
+            // Cicha awaria – mapa bazowa i tak pozostaje użyteczna nawet bez markerów akcji.
+        });
+}
+
+/**
+ * Parsuje wartość zapisaną w missions.coordinates (format "lat,lng",
+ * np. "49.2298,19.9822") na parę liczb [lat, lng] zrozumiałą dla Leaflet.
+ * Zwraca null, jeśli format jest nieprawidłowy lub pole jest puste.
+ */
+function parseCoordinates(raw) {
+    if (!raw || typeof raw !== 'string') return null;
+
+    const parts = raw.split(',').map(p => parseFloat(p.trim()));
+    if (parts.length !== 2 || parts.some(Number.isNaN)) return null;
+
+    return parts;
+}
+
+/**
+ * Minimalne escapowanie HTML dla treści wstawianych do popupów Leaflet
+ * przez innerHTML (ochrona przed XSS – tytuły/lokalizacje akcji pochodzą
+ * z bazy danych i mogły zostać wprowadzone przez użytkownika).
+ */
+function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value === null || value === undefined ? '' : String(value);
+    return div.innerHTML;
+}
+
+// 8. Confirm delete helper (called inline via onsubmit)
 function confirmDelete(msg) {
   return confirm(msg || 'Czy na pewno chcesz usunąć ten element?');
 }
 
 // ============================================================
-// 8. Form validation (wzorzec z zajęć)
+// 9. Form validation (wzorzec z zajęć)
 // ============================================================
 
 function isEmail(email) {

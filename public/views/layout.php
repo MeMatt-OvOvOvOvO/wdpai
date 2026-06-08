@@ -15,6 +15,11 @@ $roleLabel = $userRole === 'coordinator' ? 'Koordynator' : 'Ratownik';
   <title><?= htmlspecialchars($pageTitle ?? 'TOPR Rescue') ?> – TOPR Rescue</title>
   <link rel="stylesheet" href="/public/css/app.css"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"/>
+  <?php if (($activePage ?? '') === 'dashboard'): ?>
+  <!-- Leaflet.js – darmowa biblioteka mapowa (BSD-2-Clause), kafelki z OpenStreetMap (bez klucza API) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <?php endif; ?>
 </head>
 <body>
 
