@@ -1,2 +1,7 @@
 .vscode
 .vscodeconfig.php
+
+# Zależności i cache testów (PHPUnit instalowany przez composer install)
+/vendor/
+/.phpunit.cache/
+.phpunit.result.cache
