@@ -33,6 +33,14 @@ RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.in
     echo 'session.save_path = /tmp' >> /usr/local/etc/php/conf.d/docker-php-session.ini; \
     echo 'session.gc_maxlifetime = 3600' >> /usr/local/etc/php/conf.d/docker-php-session.ini;
 
+# E4: w produkcji nie pokazujemy stack trace / surowych błędów użytkownikowi –
+# błędy nadal trafiają do logów (log_errors), tylko nie są wyświetlane w przeglądarce
+RUN echo 'display_errors = Off' >> /usr/local/etc/php/conf.d/docker-php-error-reporting.ini; \
+    echo 'display_startup_errors = Off' >> /usr/local/etc/php/conf.d/docker-php-error-reporting.ini; \
+    echo 'html_errors = Off' >> /usr/local/etc/php/conf.d/docker-php-error-reporting.ini; \
+    echo 'log_errors = On' >> /usr/local/etc/php/conf.d/docker-php-error-reporting.ini; \
+    echo 'error_log = /tmp/php_errors.log' >> /usr/local/etc/php/conf.d/docker-php-error-reporting.ini;
+
 # Copy the application code
 COPY . /app
 
