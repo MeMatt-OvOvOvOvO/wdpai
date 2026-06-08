@@ -10,6 +10,27 @@ class SecurityController extends AppController
         $this->userRepository = UserRepository::getInstance();
     }
 
+    /**
+     * Wspólny helper do renderowania formularza auth (login/register) wraz
+     * z komunikatem błędu i świeżym tokenem CSRF. Eliminuje powielanie bloku
+     * render([...'error'..., 'csrfToken'...]) w wielu miejscach kontrolera.
+     *
+     * @param string   $view     nazwa widoku (np. 'auth/login', 'auth/register')
+     * @param string   $message  treść komunikatu błędu
+     * @param int|null $httpCode opcjonalny kod HTTP do ustawienia (np. 403, 429)
+     */
+    private function renderAuthError(string $view, string $message, ?int $httpCode = null): void
+    {
+        if ($httpCode !== null) {
+            http_response_code($httpCode);
+        }
+
+        $this->render($view, [
+            'error'     => $message,
+            'csrfToken' => SessionService::generateCsrfToken(),
+        ]);
+    }
+
     public function login(): void
     {
         if (SessionService::isLoggedIn()) {
@@ -28,11 +49,7 @@ class SecurityController extends AppController
         // B2: Weryfikacja CSRF tokena
         $csrfToken = $_POST['csrf_token'] ?? '';
         if (!SessionService::validateCsrfToken($csrfToken)) {
-            http_response_code(403);
-            $this->render('auth/login', [
-                'error'     => 'Nieprawidłowe żądanie. Spróbuj ponownie.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/login', 'Nieprawidłowe żądanie. Spróbuj ponownie.', 403);
             return;
         }
 
@@ -43,37 +60,28 @@ class SecurityController extends AppController
         $lockoutRemaining = SessionService::getLoginLockoutRemaining($email);
         if ($lockoutRemaining > 0) {
             $minutes = (int)ceil($lockoutRemaining / 60);
-            http_response_code(429);
-            $this->render('auth/login', [
-                'error'     => "Zbyt wiele nieudanych prób logowania. Spróbuj ponownie za ok. {$minutes} min.",
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError(
+                'auth/login',
+                "Zbyt wiele nieudanych prób logowania. Spróbuj ponownie za ok. {$minutes} min.",
+                429
+            );
             return;
         }
 
         // D2: Limit długości inputów
         if (strlen($email) > 255 || strlen($password) > 255) {
-            $this->render('auth/login', [
-                'error'     => 'Nieprawidłowe dane logowania.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/login', 'Nieprawidłowe dane logowania.');
             return;
         }
 
         if (empty($email) || empty($password)) {
-            $this->render('auth/login', [
-                'error'     => 'Uzupełnij wszystkie pola.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/login', 'Uzupełnij wszystkie pola.');
             return;
         }
 
         // C1: Walidacja formatu email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->render('auth/login', [
-                'error'     => 'Nieprawidłowy format adresu email.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/login', 'Nieprawidłowy format adresu email.');
             return;
         }
 
@@ -85,18 +93,12 @@ class SecurityController extends AppController
             error_log("Failed login attempt for email: {$email} from IP: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
             // A4: Zlicz nieudaną próbę – po przekroczeniu progu uruchomi się blokada
             SessionService::registerFailedLogin($email);
-            $this->render('auth/login', [
-                'error'     => 'Nieprawidłowy email lub hasło.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/login', 'Nieprawidłowy email lub hasło.');
             return;
         }
 
         if (!$user->isActive()) {
-            $this->render('auth/login', [
-                'error'     => 'Konto jest nieaktywne.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/login', 'Konto jest nieaktywne.');
             return;
         }
 
@@ -134,11 +136,7 @@ class SecurityController extends AppController
         // C2: Weryfikacja CSRF tokena
         $csrfToken = $_POST['csrf_token'] ?? '';
         if (!SessionService::validateCsrfToken($csrfToken)) {
-            http_response_code(403);
-            $this->render('auth/register', [
-                'error'     => 'Nieprawidłowe żądanie. Spróbuj ponownie.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/register', 'Nieprawidłowe żądanie. Spróbuj ponownie.', 403);
             return;
         }
 
@@ -149,44 +147,29 @@ class SecurityController extends AppController
 
         // D2: Limity długości
         if (strlen($email) > 255 || strlen($username) > 50 || strlen($password) > 255) {
-            $this->render('auth/register', [
-                'error'     => 'Przekroczono maksymalną długość pól.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/register', 'Przekroczono maksymalną długość pól.');
             return;
         }
 
         if (empty($email) || empty($password) || empty($username)) {
-            $this->render('auth/register', [
-                'error'     => 'Uzupełnij wszystkie pola.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/register', 'Uzupełnij wszystkie pola.');
             return;
         }
 
         // C1: Walidacja formatu email
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $this->render('auth/register', [
-                'error'     => 'Nieprawidłowy format adresu email.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/register', 'Nieprawidłowy format adresu email.');
             return;
         }
 
         // B4: Walidacja złożoności hasła
         if (strlen($password) < 8) {
-            $this->render('auth/register', [
-                'error'     => 'Hasło musi mieć minimum 8 znaków.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/register', 'Hasło musi mieć minimum 8 znaków.');
             return;
         }
 
         if ($password !== $password2) {
-            $this->render('auth/register', [
-                'error'     => 'Hasła nie są identyczne.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError('auth/register', 'Hasła nie są identyczne.');
             return;
         }
 
@@ -194,10 +177,10 @@ class SecurityController extends AppController
 
         // C4: Nie zdradzamy czy email już istnieje
         if ($existing) {
-            $this->render('auth/register', [
-                'error'     => 'Jeśli podany adres jest prawidłowy, otrzymasz wiadomość z potwierdzeniem.',
-                'csrfToken' => SessionService::generateCsrfToken(),
-            ]);
+            $this->renderAuthError(
+                'auth/register',
+                'Jeśli podany adres jest prawidłowy, otrzymasz wiadomość z potwierdzeniem.'
+            );
             return;
         }
 
