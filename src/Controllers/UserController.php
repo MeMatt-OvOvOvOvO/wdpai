@@ -6,7 +6,7 @@ class UserController extends AppController
 
     public function __construct()
     {
-        $this->userRepo = new UserRepository();
+        $this->userRepo = UserRepository::getInstance(); // D1: singleton
     }
 
     public function index(): void

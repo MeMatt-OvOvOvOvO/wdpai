@@ -6,8 +6,8 @@ class SecurityController extends AppController
 
     public function __construct()
     {
-        // D1: UserRepository tworzony przez singleton DatabaseService
-        $this->userRepository = new UserRepository();
+        // D1: UserRepository zarządzany jako singleton (jedna spójna instancja)
+        $this->userRepository = UserRepository::getInstance();
     }
 
     public function login(): void
@@ -38,6 +38,18 @@ class SecurityController extends AppController
 
         $email    = $this->getPost('email');
         $password = $this->getPost('password');
+
+        // A4: Limit prób logowania / blokada czasowa
+        $lockoutRemaining = SessionService::getLoginLockoutRemaining($email);
+        if ($lockoutRemaining > 0) {
+            $minutes = (int)ceil($lockoutRemaining / 60);
+            http_response_code(429);
+            $this->render('auth/login', [
+                'error'     => "Zbyt wiele nieudanych prób logowania. Spróbuj ponownie za ok. {$minutes} min.",
+                'csrfToken' => SessionService::generateCsrfToken(),
+            ]);
+            return;
+        }
 
         // D2: Limit długości inputów
         if (strlen($email) > 255 || strlen($password) > 255) {
@@ -71,6 +83,8 @@ class SecurityController extends AppController
         if (!$user || !password_verify($password, $user->getPassword())) {
             // E5: Logowanie nieudanych prób (bez hasła)
             error_log("Failed login attempt for email: {$email} from IP: " . ($_SERVER['REMOTE_ADDR'] ?? 'unknown'));
+            // A4: Zlicz nieudaną próbę – po przekroczeniu progu uruchomi się blokada
+            SessionService::registerFailedLogin($email);
             $this->render('auth/login', [
                 'error'     => 'Nieprawidłowy email lub hasło.',
                 'csrfToken' => SessionService::generateCsrfToken(),
@@ -85,6 +99,9 @@ class SecurityController extends AppController
             ]);
             return;
         }
+
+        // A4: Poprawne logowanie – wyczyść licznik nieudanych prób
+        SessionService::clearLoginAttempts($email);
 
         // B3: Regeneracja ID sesji po logowaniu (ochrona przed session fixation)
         session_regenerate_id(true);

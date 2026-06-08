@@ -2,17 +2,33 @@
 
 class UserRepository
 {
+    // D1: UserRepository zarządzany jako singleton – jedna spójna instancja
+    private static ?UserRepository $instance = null;
+
     private PDO $db;
 
-    public function __construct()
+    private function __construct()
     {
         $this->db = DatabaseService::getInstance()->connect();
     }
 
+    public static function getInstance(): UserRepository
+    {
+        if (self::$instance === null) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    // Zapobiega klonowaniu singletona
+    private function __clone() {}
+
     public function getUserByEmail(string $email): ?User
     {
+        // C5: pobieramy tylko kolumny potrzebne do uwierzytelnienia, nie SELECT *
         $stmt = $this->db->prepare('
-            SELECT u.*, r.name AS role_name
+            SELECT u.id, u.username, u.email, u.password, u.role_id, u.is_active, u.created_at,
+                   r.name AS role_name
             FROM users u
             JOIN roles r ON u.role_id = r.id
             WHERE u.email = :email AND u.is_active = TRUE
@@ -25,8 +41,10 @@ class UserRepository
 
     public function getUserByUsername(string $username): ?User
     {
+        // C5: pobieramy tylko potrzebne kolumny zamiast SELECT *
         $stmt = $this->db->prepare('
-            SELECT u.*, r.name AS role_name
+            SELECT u.id, u.username, u.email, u.password, u.role_id, u.is_active, u.created_at,
+                   r.name AS role_name
             FROM users u
             JOIN roles r ON u.role_id = r.id
             WHERE u.username = :username AND u.is_active = TRUE
@@ -39,8 +57,10 @@ class UserRepository
 
     public function getUserById(int $id): ?User
     {
+        // C5: pobieramy tylko potrzebne kolumny zamiast SELECT *
         $stmt = $this->db->prepare('
-            SELECT u.*, r.name AS role_name
+            SELECT u.id, u.username, u.email, u.password, u.role_id, u.is_active, u.created_at,
+                   r.name AS role_name
             FROM users u
             JOIN roles r ON u.role_id = r.id
             WHERE u.id = :id

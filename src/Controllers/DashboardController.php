@@ -10,7 +10,7 @@ class DashboardController extends AppController
     {
         $this->missionRepo   = new MissionRepository();
         $this->equipmentRepo = new EquipmentRepository();
-        $this->userRepo      = new UserRepository();
+        $this->userRepo      = UserRepository::getInstance(); // D1: singleton
     }
 
     public function index(): void

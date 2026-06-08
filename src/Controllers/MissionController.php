@@ -8,7 +8,7 @@ class MissionController extends AppController
     public function __construct()
     {
         $this->missionRepo = new MissionRepository();
-        $this->userRepo    = new UserRepository();
+        $this->userRepo    = UserRepository::getInstance(); // D1: singleton
     }
 
     public function index(): void
