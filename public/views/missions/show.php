@@ -10,21 +10,21 @@ ob_start();
       <div class="page-subtitle">Akcje Ratunkowe</div>
       <h1 class="page-title"><?= htmlspecialchars($mission->getTitle()) ?></h1>
     </div>
-    <div style="display:flex;gap:0.75rem">
+    <div class="page-header__actions" style="display:flex;gap:0.75rem">
       <a href="/missions" class="btn btn--ghost">
         <span class="material-symbols-outlined">arrow_back</span>
-        Powrót
+        <span class="btn-text">Powrót</span>
       </a>
       <?php if (SessionService::isCoordinator()): ?>
       <a href="/missions/<?= $mission->getId() ?>/edit" class="btn btn--secondary">
         <span class="material-symbols-outlined">edit</span>
-        Edytuj
+        <span class="btn-text">Edytuj</span>
       </a>
       <?php endif; ?>
     </div>
   </div>
 
-  <div style="display:grid;grid-template-columns:2fr 1fr;gap:2rem">
+  <div class="mission-detail-grid" style="display:grid;grid-template-columns:2fr 1fr;gap:2rem">
 
     <!-- ===== LEWA KOLUMNA: Szczegóły ===== -->
     <div>
@@ -36,7 +36,7 @@ ob_start();
           </h2>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="name-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
           <div>
             <div class="form-label">Typ zdarzenia</div>
             <div style="font-weight:500"><?= htmlspecialchars($mission->getIncidentTypeName() ?? '—') ?></div>

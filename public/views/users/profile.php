@@ -75,7 +75,7 @@ ob_start();
       </div>
 
       <form method="POST" action="/profile">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="name-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
           <div class="form-group">
             <label class="form-label" for="first_name">Imię</label>
             <input class="form-input" type="text" id="first_name" name="first_name"

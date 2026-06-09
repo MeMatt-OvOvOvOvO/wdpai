@@ -38,7 +38,7 @@ if (!SessionService::isCoordinator()):
 
   <div class="card">
     <div class="table-wrap">
-      <table class="table">
+      <table class="table table--users">
         <thead>
           <tr>
             <th>Użytkownik</th>
@@ -85,7 +85,7 @@ if (!SessionService::isCoordinator()):
               <div style="display:flex;gap:0.5rem">
                 <a href="/users/<?= $u->getId() ?>/edit" class="btn btn--secondary btn--sm">
                   <span class="material-symbols-outlined">edit</span>
-                  Edytuj
+                  <span class="btn-text">Edytuj</span>
                 </a>
                 <form method="POST" action="/users/<?= $u->getId() ?>/delete" style="margin:0"
                       onsubmit="return confirmDelete('Czy na pewno chcesz usunąć użytkownika <?= htmlspecialchars(addslashes($u->getUsername())) ?>?')">

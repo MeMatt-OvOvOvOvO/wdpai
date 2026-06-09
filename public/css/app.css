@@ -1170,6 +1170,53 @@ img { max-width: 100%; display: block; }
 /* ============================================================
    RESPONSIVE - MEDIA QUERIES
    ============================================================ */
+
+/* Wersja mobilna – cieplejsza, mocniej "czerwona" paleta.
+   Wzorowana na mockupach z folderu stitch_ekran_logowania_topr_mobile
+   (kolory "primary": #d7191f, "background-dark": #211111): w terenie
+   (śnieg, mgła, zmrok) nasycona czerwień jest dla ratowników TOPR
+   bardziej wyrazista i czytelna niż chłodna, zbliżona do czerni paleta
+   wersji desktopowej. Po zmniejszeniu ekranu tło i powierzchnie
+   przechodzą więc w stonowaną, ciemną czerwień/bordo zamiast grafitu,
+   a kolor akcentu staje się bardziej nasycony i "żywy".
+   Dzięki temu, że cały design system opiera się na zmiennych CSS
+   (--color-bg, --color-surface*, --color-primary...), wystarczy
+   nadpisać je w jednym miejscu, a zmiana automatycznie obejmie
+   sidebar, karty, przyciski, odznaki, obramowania i cienie. */
+@media (max-width: 768px) {
+  :root {
+    /* Ciemne, zimne tła – wysoki kontrast wobec jaskrawej czerwieni */
+    --color-bg:               #150a0a;
+    --color-surface:          #1e0e0e;
+    --color-surface-low:      #271212;
+    --color-surface-mid:      #301616;
+    --color-surface-high:     #3d1a1a;
+    --color-surface-highest:  #4e2020;
+    --color-bright:           #5f2828;
+
+    /* Czerwień w pełnym nasyceniu: max R, mało G/B → ciepła, jaskrawa,
+       widoczna na śniegu, w mgle i przy słabym oświetleniu.
+       Ludzkie oko najlepiej rozróżnia barwy w zakresie 600–650 nm
+       (pomarańczowawa czerwień) – stąd lekkie przesunięcie w stronę
+       ciepłego odcienia zamiast chłodnego karmazynu. */
+    --color-primary:          #ff2010;
+    --color-primary-hover:    #ff4030;
+    --color-primary-dim:      rgba(255, 32, 16, 0.22);
+    --color-primary-border:   rgba(255, 32, 16, 0.45);
+
+    --color-border:           rgba(255, 32, 16, 0.30);
+    --color-border-light:     rgba(255, 32, 16, 0.20);
+
+    /* Silniejsza poświata – widoczna nawet przez mgłę */
+    --shadow-red: 0 0 32px rgba(255, 32, 16, 0.55);
+
+    /* Tekst nieco jaśniejszy – lepsza czytelność przy zmniejszonej
+       adaptacji oka do ciemności (śnieg, reflektor, latarka) */
+    --color-text:             #f5f5f8;
+    --color-text-muted:       #f0d0c8;
+  }
+}
+
 @media (max-width: 1200px) {
   .ops-grid { grid-template-columns: 1fr; }
   .grid-3   { grid-template-columns: repeat(2, 1fr); }
@@ -1179,10 +1226,12 @@ img { max-width: 100%; display: block; }
   :root { --sidebar-width: 0px; }
 
   .sidebar {
+    width: 240px;            /* explicit – translateX(-100%) musi znać faktyczną szerokość */
     transform: translateX(-100%);
     transition: transform 0.3s ease;
+    overflow: hidden;        /* zapobiega wyciekaniu nav-itemów poza 0-px kontener */
   }
-  .sidebar.open { transform: translateX(0); width: 240px; }
+  .sidebar.open { transform: translateX(0); }
 
   .main-wrapper { margin-left: 0; }
 
@@ -1199,13 +1248,83 @@ img { max-width: 100%; display: block; }
 
 @media (max-width: 640px) {
   .grid-3, .grid-2 { grid-template-columns: 1fr; }
-  .page-header { flex-direction: column; }
+  .page-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+  .page-header > div:last-child { width: 100%; display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .page-header > div:last-child .btn { flex: 1; justify-content: center; }
+  .page-header > div:last-child .form-select { width: 100%; }
   .ops-grid   { grid-template-columns: 1fr; }
   .command-grid { grid-template-columns: repeat(2, 1fr); }
   .topbar__user-info { display: none; }
 
   .login-corner { display: block; }
   .login-terminal__body { padding: 1.5rem; }
+
+  /* ——— Page header actions: full-width na mobile ——— */
+  .page-header__actions { width: 100%; flex-wrap: wrap; }
+  .page-header__actions .form-select { flex: 1; min-width: 0; width: auto !important; }
+  .page-header__actions .btn { flex: 1; justify-content: center; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* ——— Edit form / mission detail: 2-kolumnowy grid → 1-kolumnowy na mobile ——— */
+  .edit-form-grid       { grid-template-columns: 1fr !important; }
+  .name-grid            { grid-template-columns: 1fr !important; }
+  .mission-detail-grid  { grid-template-columns: 1fr !important; gap: 1rem !important; }
+
+  /* Przyciski akcji w kartach misji – full-width na mobile */
+  .mission-detail-grid .btn--primary,
+  .mission-detail-grid .btn--secondary { width: 100%; justify-content: center; }
+
+  /* ——— Tabele: mniejszy padding komórek, nagłówki mogą zawijać ——— */
+  .table th { white-space: normal; padding: 0.5rem; font-size: 0.55rem; }
+  .table td { padding: 0.625rem 0.5rem; }
+  .card { padding: 1rem; }
+
+  /* ——— Equipment: 4 stat-cards → 2×2 ——— */
+  .equip-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* ——— Missions table: ukryj Typ zdarzenia (3) + Czas (5) ——— */
+  .table--missions th:nth-child(3),
+  .table--missions td:nth-child(3),
+  .table--missions th:nth-child(5),
+  .table--missions td:nth-child(5) { display: none; }
+
+  /* Akcje w tabeli misji: tylko ikona */
+  .table--missions td:nth-child(6) .btn span.material-symbols-outlined { margin: 0; }
+  .table--missions td:nth-child(6) .btn { padding: 0.3rem 0.5rem; min-width: 0; }
+  .table--missions td:nth-child(6) .btn-text { display: none; }
+
+  /* ——— Users table: ukryj Email (2) + Status (4) ——— */
+  .table--users th:nth-child(2),
+  .table--users td:nth-child(2),
+  .table--users th:nth-child(4),
+  .table--users td:nth-child(4) { display: none; }
+
+  /* Użytkownik (1): ukryj ikonę awatara, ogranicz szerokość tekstu */
+  .table--users td:nth-child(1) { max-width: 150px; overflow: hidden; }
+  .table--users td:nth-child(1) .material-symbols-outlined { display: none; }
+  /* outer flex – musi móc się skurczyć */
+  .table--users td:nth-child(1) > div { gap: 0; min-width: 0; overflow: hidden; }
+  /* wrapper div bezpośrednio zawierający tekst */
+  .table--users td:nth-child(1) > div > div { min-width: 0; overflow: hidden; }
+  /* sam tekst nazwy użytkownika */
+  .table--users td:nth-child(1) > div > div > div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 130px;
+  }
+
+  /* Rola (3): miniaturowy badge */
+  .table--users td:nth-child(3) .badge { font-size: 0.5rem; padding: 0.2rem 0.4rem; }
+
+  /* Akcje w tabeli userów: super kompaktowe */
+  .table--users th:nth-child(5),
+  .table--users td:nth-child(5) { padding: 0.5rem 0.25rem; }
+  .table--users td:nth-child(5) .btn { padding: 0.3rem 0.4rem; min-width: 0; }
+  .table--users td:nth-child(5) .btn-text { display: none; }
+
+  /* ——— Missions table: akcje super kompaktowe ——— */
+  .table--missions th:nth-child(6),
+  .table--missions td:nth-child(6) { padding: 0.5rem 0.25rem; }
 }
 
 /* Hamburger */

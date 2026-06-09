@@ -10,10 +10,10 @@ ob_start();
       <div class="page-subtitle">Akcje Ratunkowe</div>
       <h1 class="page-title">Edytuj Akcję</h1>
     </div>
-    <div style="display:flex;gap:0.75rem">
+    <div class="page-header__actions" style="display:flex;gap:0.75rem">
       <a href="/missions/<?= $mission->getId() ?>" class="btn btn--ghost">
         <span class="material-symbols-outlined">arrow_back</span>
-        Powrót
+        <span class="btn-text">Powrót</span>
       </a>
     </div>
   </div>
@@ -70,7 +70,7 @@ ob_start();
         </select>
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="name-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
         <div class="form-group">
           <label class="form-label" for="start_time">Czas rozpoczęcia</label>
           <input class="form-input" type="datetime-local" id="start_time" name="start_time"

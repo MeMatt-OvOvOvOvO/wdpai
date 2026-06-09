@@ -13,15 +13,17 @@ Projekt zaliczeniowy z przedmiotu **Wstęp do Projektowania Aplikacji Internetow
 
 1. [Stos technologiczny](#stos-technologiczny)
 2. [Architektura aplikacji](#architektura-aplikacji)
-3. [Baza danych i diagram ERD](#baza-danych-i-diagram-erd)
-4. [Role i uprawnienia użytkowników](#role-i-uprawnienia-użytkowników)
-5. [Bezpieczeństwo](#bezpieczeństwo)
-6. [Uruchomienie projektu (Docker)](#uruchomienie-projektu-docker)
-7. [Endpointy / mapa tras](#endpointy--mapa-tras)
-8. [Scenariusz testowy](#scenariusz-testowy)
-9. [Testy automatyczne](#testy-automatyczne)
-10. [Zrzuty ekranu](#zrzuty-ekranu)
-11. [Checklist zrealizowanych wymagań](#checklist-zrealizowanych-wymagań)
+3. [Zasady SOLID](#zasady-solid)
+4. [Baza danych i diagram ERD](#baza-danych-i-diagram-erd)
+5. [Trzecia Postać Normalna (3NF)](#trzecia-postać-normalna-3nf)
+6. [Role i uprawnienia użytkowników](#role-i-uprawnienia-użytkowników)
+7. [Bezpieczeństwo](#bezpieczeństwo)
+8. [Uruchomienie projektu (Docker)](#uruchomienie-projektu-docker)
+9. [Endpointy / mapa tras](#endpointy--mapa-tras)
+10. [Scenariusz testowy](#scenariusz-testowy)
+11. [Testy automatyczne](#testy-automatyczne)
+12. [Zrzuty ekranu](#zrzuty-ekranu)
+13. [Checklist zrealizowanych wymagań](#checklist-zrealizowanych-wymagań)
 
 ---
 
@@ -64,6 +66,44 @@ Przepływ żądania: `nginx → index.php → Routing::run() → Controller::met
 
 Każdy kontroler dziedziczy po `AppController`, który dostarcza wspólne metody pomocnicze:
 `render()`, `redirect()`, `json()`/`jsonError()`, `isPost()`/`isGet()`, `getPost()`/`getQuery()`.
+
+---
+
+## Zasady SOLID
+
+Projekt świadomie stosuje zasady SOLID w warstwie backendu (PHP OOP), z pragmatycznym podejściem właściwym dla projektu MVC bez frameworka.
+
+### S — Single Responsibility Principle
+
+Każda klasa ma dokładnie jeden powód do zmiany:
+
+- `MissionController`, `EquipmentController`, `UserController`, `SecurityController` — każdy kontroler obsługuje wyłącznie jeden moduł domenowy; żadna logika prezentacji ani dostępu do danych nie trafia do kontrolera
+- `MissionRepository`, `EquipmentRepository`, `UserRepository` — wyłącznie dostęp do danych (PDO + prepared statements); zero logiki biznesowej
+- `User`, `Mission`, `Equipment` (encje) — wyłącznie dane + logika domenowa (np. `getStatusBadgeClass()`, `isActive()`, `getServiceLifePct()`); zero zapytań SQL
+- `SessionService` — zarządzanie sesją PHP, tokenami CSRF, rolami i limitem logowań; nic więcej
+- `DatabaseService` — wyłącznie singleton PDO; żadnych zapytań domenowych
+
+### O — Open/Closed Principle
+
+Klasy są otwarte na rozszerzanie, zamknięte na modyfikację:
+
+- `AppController` (klasa bazowa) dostarcza `render()`, `redirect()`, `json()`, `requireLogin()` itd. — dodanie nowego modułu wymaga **wyłącznie** napisania nowego kontrolera rozszerzającego `AppController`, bez dotykania istniejącego kodu
+- `Routing.php` — nowe trasy dodaje się przez dopisanie wpisu; istniejące mapowania pozostają nienaruszone
+
+### L — Liskov Substitution Principle
+
+Klasy pochodne można używać wszędzie tam, gdzie oczekiwana jest klasa bazowa:
+
+- Wszystkie kontrolery rozszerzają `AppController` i respektują jego kontrakt — `render()`, `redirect()`, `json()` działają identycznie w każdej podklasie, nie zmieniając semantyki
+- Encje (`User`, `Mission`, `Equipment`) są niezależnymi, samodzielnymi obiektami bez efektów ubocznych — warstwy kontrolera i widoku mogą na nich polegać bez znajomości konkretnego typu
+
+### I — Interface Segregation Principle
+
+W projekcie nie zastosowano PHP-owych interfejsów (np. `RepositoryInterface`). Jest to świadoma decyzja: przy trzech repozytoriach z rozłącznym API (brak polimorficznego użycia między nimi) formalne interfejsy zwiększyłyby tylko boilerplate bez realnej korzyści projektowej. Każde repozytorium udostępnia dokładnie taki zestaw metod, jakiego wymaga obsługujący je kontroler — bez „grubych" interfejsów zmuszających do implementacji niepotrzebnych metod.
+
+### D — Dependency Inversion Principle
+
+Repozytoria pobierają połączenie z bazą przez `DatabaseService::getInstance()` (statyczny singleton), a `UserRepository` jest singletonem dostępnym przez `UserRepository::getInstance()`. Jest to świadomy kompromis: w projekcie bez kontenera DI pełne wstrzykiwanie zależności przez konstruktor zwiększyłoby złożoność kodu bardziej niż przyniosłoby korzyści. Wyższa warstwa (kontrolery) nie zależy od szczegółów implementacji PDO — dostają gotowy obiekt repozytorium, nie wiedzą nic o sterownikach ani konfiguracji połączenia.
 
 ---
 
@@ -210,6 +250,39 @@ Operacje wieloetapowe w warstwie repozytoriów są opakowane w transakcje
 Pełna struktura wraz z danymi przykładowymi jest dostępna jako plik SQL:
 [`docker/db/init/init.sql`](docker/db/init/init.sql). Plik ten jest automatycznie wykonywany
 przy pierwszym uruchomieniu kontenera PostgreSQL (mechanizm `docker-entrypoint-initdb.d`).
+
+---
+
+## Trzecia Postać Normalna (3NF)
+
+Schemat bazy danych spełnia **Trzecią Postać Normalną (3NF)**, co gwarantuje brak redundancji danych i odporność na anomalie wstawiania, aktualizacji i usuwania.
+
+### 1NF — Pierwsza Postać Normalna ✅
+
+- Wszystkie kolumny przechowują wartości **atomowe** — brak list, tablic ani struktur zagnieżdżonych w polach
+- Każda tabela ma zdefiniowany **klucz główny** (PK)
+- Brak grup powtarzających się (repeating groups)
+
+### 2NF — Druga Postać Normalna ✅
+
+Każdy atrybut niekluczowy zależy od **całego** klucza głównego (dotyczy tabel ze złożonym PK):
+
+- `mission_rescuers (mission_id, user_id)` — atrybuty `role` i `assigned_at` opisują konkretne **przypisanie** ratownika do akcji, zależą od obu kolumn klucza jednocześnie, nie tylko od jednej z nich
+- `equipment_loans` — klucz prosty (`id`), więc 2NF spełniona trywialnie
+- Wszystkie pozostałe tabele mają klucze proste — 2NF spełniona trywialnie
+
+### 3NF — Trzecia Postać Normalna ✅
+
+Brak **zależności tranzytywnych** — żaden atrybut niekluczowy nie zależy od innego atrybutu niekluczowego:
+
+| Tabela | Potencjalne zagrożenie 3NF | Zastosowane rozwiązanie |
+|--------|---------------------------|-------------------------|
+| `users` | nazwa roli mogłaby być przechowywana bezpośrednio | `role_id FK → roles(id)` — nazwa roli wyłącznie w tabeli `roles` |
+| `missions` | nazwa typu zdarzenia mogłaby być przechowywana bezpośrednio | `incident_type_id FK → incident_types(id)` |
+| `equipment` | nazwa kategorii sprzętu mogłaby być przechowywana bezpośrednio | `type_id FK → equipment_types(id)` |
+| `users` | atrybuty profilu (imię, nazwisko, telefon, bio) mogłyby zależeć od e-maila | Wydzielona tabela `profiles` w relacji 1:1 — atrybuty profilu zależą wyłącznie od `user_id` PK |
+
+Wszystkie słowniki (`roles`, `incident_types`, `equipment_types`) są osobnymi tabelami z własnym PK. Referencje przez klucze obce eliminują redundancję: zmiana np. nazwy roli wymaga aktualizacji **jednego** wiersza w `roles`, a nie setek wierszy w `users`.
 
 ---
 
@@ -454,7 +527,9 @@ TEST_COORDINATOR_PASSWORD=password123 \
 | Docker                                                  | ✅ |
 | Architektura aplikacji MVC                              | ✅ |
 | Kod napisany obiektowo (backend)                        | ✅ |
+| Zasady SOLID (opis + analiza w README)                  | ✅ |
 | Diagram ERD                                             | ✅ |
+| Trzecia Postać Normalna — 3NF (opis + analiza w README) | ✅ |
 | Git (systematyka commitów, merge do main)               | ✅ |
 | Realizacja tematu                                       | ✅ |
 | HTML                                                    | ✅ |
@@ -465,7 +540,7 @@ TEST_COORDINATOR_PASSWORD=password123 \
 | JavaScript                                              | ✅ |
 | Fetch API (AJAX)                                        | ✅ |
 | Design                                                  | ✅ |
-| Responsywność                                           | ✅ |
+| Responsywność (desktop + mobile)                        | ✅ |
 | Logowanie                                               | ✅ |
 | Sesja użytkownika                                       | ✅ |
 | Uprawnienia użytkowników                                | ✅ |

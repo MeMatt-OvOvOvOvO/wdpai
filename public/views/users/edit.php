@@ -40,7 +40,7 @@ if (!SessionService::isCoordinator()):
   </div>
   <?php endif; ?>
 
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:900px">
+  <div class="edit-form-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;max-width:900px">
 
     <!-- Konto -->
     <div class="card">
@@ -102,7 +102,7 @@ if (!SessionService::isCoordinator()):
       <form method="POST" action="/users/<?= $user->getId() ?>/edit">
         <input type="hidden" name="section" value="profile">
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div class="name-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
           <div class="form-group">
             <label class="form-label" for="first_name">Imię</label>
             <input class="form-input" type="text" id="first_name" name="first_name"

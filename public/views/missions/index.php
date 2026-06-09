@@ -23,8 +23,8 @@ ob_start();
       <div class="page-subtitle">TOPR Rescue</div>
       <h1 class="page-title">Akcje Ratunkowe</h1>
     </div>
-    <div style="display:flex;gap:0.75rem;align-items:center">
-      <select id="statusFilter" class="form-select" style="width:auto;padding:0.5rem 1rem">
+    <div class="page-header__actions" style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap">
+      <select id="statusFilter" class="form-select" style="padding:0.5rem 1rem">
         <option value="all">Wszystkie statusy</option>
         <option value="open">Otwarte</option>
         <option value="active">Aktywne</option>
@@ -42,7 +42,7 @@ ob_start();
 
   <div class="card">
     <div class="table-wrap">
-      <table class="table">
+      <table class="table table--missions">
         <thead>
           <tr>
             <th>Tytuł</th>
@@ -83,12 +83,12 @@ ob_start();
               <div style="display:flex;gap:0.5rem">
                 <a href="/missions/<?= $mission->getId() ?>" class="btn btn--ghost btn--sm">
                   <span class="material-symbols-outlined">visibility</span>
-                  Szczegóły
+                  <span class="btn-text">Szczegóły</span>
                 </a>
                 <?php if (SessionService::isCoordinator()): ?>
                 <a href="/missions/<?= $mission->getId() ?>/edit" class="btn btn--secondary btn--sm">
                   <span class="material-symbols-outlined">edit</span>
-                  Edytuj
+                  <span class="btn-text">Edytuj</span>
                 </a>
                 <?php endif; ?>
               </div>
