@@ -26,7 +26,7 @@ ob_start();
   </div>
 
   <!-- Stat Cards -->
-  <div class="grid-3" style="grid-template-columns:repeat(4,1fr);margin-bottom:2rem">
+  <div class="grid-3 equip-stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:2rem">
     <div class="stat-card">
       <div class="stat-card__label">
         Total
