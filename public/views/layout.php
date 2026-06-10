@@ -123,7 +123,7 @@ $roleLabel = $userRole === 'coordinator' ? 'Koordynator' : 'Ratownik';
   <div class="mission-indicator__text" id="missionIndicatorText">Trwająca akcja</div>
 </div>
 
-<script src="/public/js/app.js"></script>
+<script src="/public/js/app.js?v=<?= filemtime(__DIR__ . '/../../js/app.js') ?>"></script>
 
 <!-- Notification dropdown – dołączony do body (ucieka ze stacking contextu topbara) -->
 <div id="notifPanel" style="

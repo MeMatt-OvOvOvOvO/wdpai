@@ -60,7 +60,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // 3. Status filter buttons (equipment categories)
   document.querySelectorAll('[data-filter-btn]').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-filter-btn]').forEach(b => b.classList.remove('btn--primary'));
+      document.querySelectorAll('[data-filter-btn]').forEach(b => {
+        b.classList.remove('btn--primary');
+        b.classList.add('btn--ghost');
+      });
+      btn.classList.remove('btn--ghost');
       btn.classList.add('btn--primary');
       const filter = btn.dataset.filterBtn;
       document.querySelectorAll('.equip-card').forEach(card => {
