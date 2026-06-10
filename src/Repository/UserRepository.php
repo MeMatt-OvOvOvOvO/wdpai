@@ -58,11 +58,12 @@ class UserRepository
     public function getUserById(int $id): ?User
     {
         // C5: pobieramy tylko potrzebne kolumny zamiast SELECT *
+        // LEFT JOIN roles – chroni przed null gdy role_id nie ma odpowiednika
         $stmt = $this->db->prepare('
             SELECT u.id, u.username, u.email, u.password, u.role_id, u.is_active, u.created_at,
                    r.name AS role_name
             FROM users u
-            JOIN roles r ON u.role_id = r.id
+            LEFT JOIN roles r ON u.role_id = r.id
             WHERE u.id = :id
         ');
         $stmt->execute([':id' => $id]);
@@ -144,21 +145,33 @@ class UserRepository
 
     public function updateProfile(int $userId, array $data): bool
     {
-        $fields = [];
-        $params = [':user_id' => $userId];
+        // UPSERT: jeśli profil nie istnieje (np. user dodany ręcznie przez SQL),
+        // tworzy go automatycznie; w przeciwnym razie aktualizuje.
+        $firstName = $data['first_name'] ?? '';
+        $lastName  = $data['last_name']  ?? '';
+        $rank      = $data['rank']       ?? null;
+        $phone     = $data['phone']      ?? null;
+        $bio       = $data['bio']        ?? null;
 
-        foreach (['first_name', 'last_name', 'rank', 'phone', 'bio'] as $field) {
-            if (array_key_exists($field, $data)) {
-                $fields[] = "{$field} = :{$field}";
-                $params[":{$field}"] = $data[$field];
-            }
-        }
+        $stmt = $this->db->prepare('
+            INSERT INTO profiles (user_id, first_name, last_name, rank, phone, bio)
+            VALUES (:user_id, :first_name, :last_name, :rank, :phone, :bio)
+            ON CONFLICT (user_id) DO UPDATE SET
+                first_name = EXCLUDED.first_name,
+                last_name  = EXCLUDED.last_name,
+                rank       = EXCLUDED.rank,
+                phone      = EXCLUDED.phone,
+                bio        = EXCLUDED.bio
+        ');
 
-        if (empty($fields)) return false;
-
-        $sql = 'UPDATE profiles SET ' . implode(', ', $fields) . ' WHERE user_id = :user_id';
-        $stmt = $this->db->prepare($sql);
-        return $stmt->execute($params);
+        return $stmt->execute([
+            ':user_id'    => $userId,
+            ':first_name' => $firstName,
+            ':last_name'  => $lastName,
+            ':rank'       => $rank,
+            ':phone'      => $phone,
+            ':bio'        => $bio,
+        ]);
     }
 
     public function deleteUser(int $id): bool

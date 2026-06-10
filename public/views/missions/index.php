@@ -75,7 +75,7 @@ ob_start();
               </div>
             </td>
             <td><?= htmlspecialchars($mission->getIncidentTypeName() ?? '—') ?></td>
-            <td><span class="badge <?= htmlspecialchars($mission->getStatusBadgeClass()) ?>"><?= htmlspecialchars($mission->getStatus()) ?></span></td>
+            <td><span class="badge <?= htmlspecialchars($mission->getStatusBadgeClass()) ?>"><?= htmlspecialchars($mission->getStatusLabel()) ?></span></td>
             <td style="font-size:0.75rem;color:var(--color-text-muted)">
               <?= $mission->getStartTime() ? date('d.m.Y H:i', strtotime($mission->getStartTime())) : '—' ?>
             </td>

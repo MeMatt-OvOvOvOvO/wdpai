@@ -103,7 +103,7 @@ ob_start();
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
       <span class="material-symbols-outlined" style="color:var(--color-danger)">warning</span>
       <h3 style="font-family:var(--font-headline);font-size:0.875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-danger)">
-        Danger Zone
+        Strefa Niebezpieczna
       </h3>
     </div>
     <p style="font-size:0.8rem;color:var(--color-text-muted);margin-bottom:1rem">

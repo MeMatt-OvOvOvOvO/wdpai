@@ -9,34 +9,34 @@ ob_start();
   <div class="grid-3">
     <div class="stat-card stat-card--critical">
       <div class="stat-card__label">
-        Open Incidents
+        Otwarte Incydenty
         <span class="material-symbols-outlined icon-filled" style="color:var(--color-primary)">emergency_share</span>
       </div>
       <div>
         <div class="stat-card__value"><?= str_pad((int)($missionStats['open_missions'] ?? 0), 2, '0', STR_PAD_LEFT) ?></div>
-        <div class="stat-card__sub stat-card__sub--red animate-pulse">Critical Priority</div>
+        <div class="stat-card__sub stat-card__sub--red animate-pulse">Priorytet Krytyczny</div>
       </div>
     </div>
 
     <div class="stat-card">
       <div class="stat-card__label">
-        Active Rescuers
+        Aktywni Ratownicy
         <span class="material-symbols-outlined">groups</span>
       </div>
       <div>
         <div class="stat-card__value"><?= str_pad($activeRescuersCount ?? 0, 2, '0', STR_PAD_LEFT) ?></div>
-        <div class="stat-card__sub stat-card__sub--green">On-Site</div>
+        <div class="stat-card__sub stat-card__sub--green">W terenie</div>
       </div>
     </div>
 
     <div class="stat-card">
       <div class="stat-card__label">
-        Available Gear
+        Dostępny Sprzęt
         <span class="material-symbols-outlined">inventory</span>
       </div>
       <div>
         <div class="stat-card__value"><?= $equipmentStats['ready'] ?? 0 ?></div>
-        <div class="stat-card__sub stat-card__sub--muted">Units Ready</div>
+        <div class="stat-card__sub stat-card__sub--muted">Jednostki gotowe</div>
       </div>
     </div>
   </div>
@@ -48,7 +48,7 @@ ob_start();
       <div class="section-header">
         <div class="section-title">
           <div class="section-title__dot"></div>
-          Live Operations Map
+          Mapa Operacyjna na Żywo
         </div>
         <span class="text-xxs text-dim font-mono">49.2319° N, 19.9817° E</span>
       </div>
@@ -61,14 +61,14 @@ ob_start();
         <div class="ops-map__hud">
           <div>
             <div class="hud-panel">
-              <div class="hud-panel__label">Sector: Kasprowy</div>
-              <div class="hud-panel__value">WIND: 45KM/H NW | TEMP: -12°C</div>
+              <div class="hud-panel__label">Sektor: Kasprowy</div>
+              <div class="hud-panel__value">WIATR: 45KM/H NW | TEMP: -12°C</div>
             </div>
           </div>
           <div class="flex items-center justify-between">
             <div class="sar-indicator">
               <div class="sar-indicator__dot"></div>
-              <div class="sar-indicator__label">Active SAR: North Slope</div>
+              <div class="sar-indicator__label">Aktywna akcja SAR: Północne zbocze</div>
             </div>
             <a href="/missions" class="btn btn--ghost btn--sm">
               <span class="material-symbols-outlined">open_in_full</span>
@@ -80,34 +80,34 @@ ob_start();
       <!-- Tactical Commands -->
       <div class="mt-6">
         <div class="section-header">
-          <div class="section-title">Tactical Commands</div>
+          <div class="section-title">Komendy Taktyczne</div>
         </div>
         <div class="command-grid">
           <a href="/missions/new" class="command-btn command-btn--primary">
             <span class="material-symbols-outlined">add_alert</span>
-            <span class="command-btn__label">New Incident<br>Dispatch</span>
+            <span class="command-btn__label">Nowy<br>Incydent</span>
           </a>
           <a href="/equipment" class="command-btn">
             <span class="material-symbols-outlined">inventory</span>
-            <span class="command-btn__label">Equip.<br>Check</span>
+            <span class="command-btn__label">Sprzęt<br>Check</span>
           </a>
           <a href="/missions" class="command-btn">
             <span class="material-symbols-outlined">description</span>
-            <span class="command-btn__label">Mission<br>Log</span>
+            <span class="command-btn__label">Dziennik<br>Akcji</span>
           </a>
           <?php if (SessionService::isCoordinator()): ?>
           <a href="/users" class="command-btn">
             <span class="material-symbols-outlined">group_add</span>
-            <span class="command-btn__label">Mobilize<br>Rescuers</span>
+            <span class="command-btn__label">Mobilizuj<br>Ratowników</span>
           </a>
           <?php endif; ?>
           <a href="/profile" class="command-btn">
             <span class="material-symbols-outlined">account_circle</span>
-            <span class="command-btn__label">My<br>Profile</span>
+            <span class="command-btn__label">Mój<br>Profil</span>
           </a>
           <button class="command-btn" onclick="alert('Broadcast wysłany do wszystkich jednostek.')">
             <span class="material-symbols-outlined">radio</span>
-            <span class="command-btn__label">Broadcast<br>Alert</span>
+            <span class="command-btn__label">Alarm<br>Ogólny</span>
           </button>
         </div>
       </div>
@@ -116,7 +116,7 @@ ob_start();
     <!-- Right: Tactical Briefing -->
     <div>
       <div class="section-header">
-        <div class="section-title">Tactical Briefing</div>
+        <div class="section-title">Bieżące Akcje</div>
       </div>
       <div class="briefing-list" style="max-height:600px;overflow-y:auto">
         <?php if (empty($activeMissions)): ?>

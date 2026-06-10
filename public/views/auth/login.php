@@ -30,7 +30,7 @@
       </div>
       <div class="login-brand__title">TOPR Rescue</div>
       <div class="login-brand__divider"></div>
-      <div class="login-brand__subtitle">Secure Access Terminal</div>
+      <div class="login-brand__subtitle">Bezpieczny Terminal Dostępu</div>
     </div>
 
     <!-- Terminal box -->
@@ -38,13 +38,13 @@
       <div class="login-terminal__header">
         <div class="login-terminal__status">
           <div class="status-dot"></div>
-          System Online // Encrypted
+          System Online // Zaszyfrowano
         </div>
         <div class="login-terminal__id">Terminal ID: 097-RC</div>
       </div>
       <div class="login-terminal__body">
-        <div class="login-terminal__title">Secure Login</div>
-        <div class="login-terminal__sub">Command Personnel Only</div>
+        <div class="login-terminal__title">Bezpieczne Logowanie</div>
+        <div class="login-terminal__sub">Tylko Personel Dowodzenia</div>
 
         <?php if (!empty($error)): ?>
         <div class="alert alert--error">
@@ -64,7 +64,7 @@
           <!-- B2: CSRF token -->
           <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrfToken ?? '') ?>"/>
           <div class="form-group">
-            <label class="form-label">Service ID / Email</label>
+            <label class="form-label">ID Służbowe / Email</label>
             <div class="form-input-icon">
               <span class="material-symbols-outlined">badge</span>
               <input class="form-input"
@@ -78,19 +78,21 @@
 
           <div class="form-group">
             <label class="form-label">Hasło</label>
-            <div class="form-input-icon" style="position:relative">
-              <span class="material-symbols-outlined">lock</span>
-              <input class="form-input"
-                     type="password"
-                     name="password"
-                     id="passwordField"
-                     placeholder="Wprowadź hasło"
-                     required
-                     autocomplete="current-password"
-                     style="padding-right:2.75rem"/>
+            <div style="position:relative">
+              <div class="form-input-icon">
+                <span class="material-symbols-outlined">lock</span>
+                <input class="form-input"
+                       type="password"
+                       name="password"
+                       id="passwordField"
+                       placeholder="Wprowadź hasło"
+                       required
+                       autocomplete="current-password"
+                       style="padding-right:2.75rem"/>
+              </div>
               <button type="button"
                       onclick="togglePassword()"
-                      style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);color:var(--color-text-dim);background:none;border:none;cursor:pointer;display:flex;align-items:center;">
+                      style="position:absolute;right:0.75rem;top:50%;transform:translateY(-50%);color:var(--color-text-dim);background:none;border:none;cursor:pointer;display:flex;align-items:center;z-index:2;">
                 <span class="material-symbols-outlined" id="eyeIcon">visibility_off</span>
               </button>
             </div>
@@ -105,12 +107,12 @@
 
           <button type="submit" class="btn btn--primary btn--lg w-full" style="justify-content:center">
             <span class="material-symbols-outlined">login</span>
-            Log In
+            Zaloguj się
           </button>
         </form>
 
         <div class="login-links">
-          <a href="#">Forgot Credentials?</a>
+          <a href="#">Nie pamiętasz hasła?</a>
           <a href="/register">Zarejestruj konto</a>
         </div>
 
@@ -124,11 +126,11 @@
 
     <div class="login-footer">
       <span class="material-symbols-outlined" style="font-size:0.8rem">security</span>
-      Encrypted Tactical Link v4.2.0
+      Zaszyfrowane Łącze Taktyczne v4.2.0
     </div>
 
     <p style="margin-top:1rem;font-size:0.55rem;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:0.1em;text-align:center;max-width:300px">
-      Unauthorized access to this terminal is strictly prohibited under Alpine Safety Regulation 10-C.
+      Nieautoryzowany dostęp do terminala jest surowo zabroniony zgodnie z Regulaminem Bezpieczeństwa Alpejskiego 10-C.
     </p>
   </div>
 </div>

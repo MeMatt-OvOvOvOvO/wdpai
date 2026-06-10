@@ -56,11 +56,11 @@ ob_start();
       <div class="form-group">
         <label class="form-label" for="status">Status</label>
         <select class="form-select" id="status" name="status">
-          <option value="ready"       <?= (($_POST['status'] ?? 'ready') === 'ready')       ? 'selected' : '' ?>>Gotowy (ready)</option>
-          <option value="in_use"      <?= (($_POST['status'] ?? '') === 'in_use')            ? 'selected' : '' ?>>W użyciu (in_use)</option>
-          <option value="maintenance" <?= (($_POST['status'] ?? '') === 'maintenance')       ? 'selected' : '' ?>>Serwis (maintenance)</option>
-          <option value="retired"     <?= (($_POST['status'] ?? '') === 'retired')           ? 'selected' : '' ?>>Wycofany (retired)</option>
-          <option value="lost"        <?= (($_POST['status'] ?? '') === 'lost')              ? 'selected' : '' ?>>Zaginiony (lost)</option>
+          <option value="ready"       <?= (($_POST['status'] ?? 'ready') === 'ready')       ? 'selected' : '' ?>>Gotowy</option>
+          <option value="in_use"      <?= (($_POST['status'] ?? '') === 'in_use')            ? 'selected' : '' ?>>W użyciu</option>
+          <option value="maintenance" <?= (($_POST['status'] ?? '') === 'maintenance')       ? 'selected' : '' ?>>Serwis</option>
+          <option value="retired"     <?= (($_POST['status'] ?? '') === 'retired')           ? 'selected' : '' ?>>Wycofany</option>
+          <option value="lost"        <?= (($_POST['status'] ?? '') === 'lost')              ? 'selected' : '' ?>>Zaginiony</option>
         </select>
       </div>
 

@@ -56,11 +56,11 @@ ob_start();
       <div class="form-group">
         <label class="form-label" for="status">Status</label>
         <select class="form-select" id="status" name="status">
-          <option value="ready"       <?= $equipment->getStatus() === 'ready'       ? 'selected' : '' ?>>Gotowy (ready)</option>
-          <option value="in_use"      <?= $equipment->getStatus() === 'in_use'      ? 'selected' : '' ?>>W użyciu (in_use)</option>
-          <option value="maintenance" <?= $equipment->getStatus() === 'maintenance' ? 'selected' : '' ?>>Serwis (maintenance)</option>
-          <option value="retired"     <?= $equipment->getStatus() === 'retired'     ? 'selected' : '' ?>>Wycofany (retired)</option>
-          <option value="lost"        <?= $equipment->getStatus() === 'lost'        ? 'selected' : '' ?>>Zaginiony (lost)</option>
+          <option value="ready"       <?= $equipment->getStatus() === 'ready'       ? 'selected' : '' ?>>Gotowy</option>
+          <option value="in_use"      <?= $equipment->getStatus() === 'in_use'      ? 'selected' : '' ?>>W użyciu</option>
+          <option value="maintenance" <?= $equipment->getStatus() === 'maintenance' ? 'selected' : '' ?>>Serwis</option>
+          <option value="retired"     <?= $equipment->getStatus() === 'retired'     ? 'selected' : '' ?>>Wycofany</option>
+          <option value="lost"        <?= $equipment->getStatus() === 'lost'        ? 'selected' : '' ?>>Zaginiony</option>
         </select>
       </div>
 
@@ -97,7 +97,7 @@ ob_start();
     <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
       <span class="material-symbols-outlined" style="color:var(--color-danger)">warning</span>
       <h3 style="font-family:var(--font-headline);font-size:0.875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--color-danger)">
-        Danger Zone
+        Strefa Niebezpieczna
       </h3>
     </div>
     <p style="font-size:0.8rem;color:var(--color-text-muted);margin-bottom:1rem">

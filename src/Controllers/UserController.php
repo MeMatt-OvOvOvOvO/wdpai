@@ -51,23 +51,29 @@ class UserController extends AppController
     {
         SessionService::requireCoordinator();
 
-        $id = (int)($_GET['id'] ?? 0);
+        $id      = (int)($_GET['id'] ?? 0);
+        $section = $this->getPost('section'); // 'account' lub 'profile'
 
-        $this->userRepo->updateUser($id, [
-            'role_id'   => (int)$this->getPost('role_id'),
-            'is_active' => $this->getPost('is_active') === '1',
-        ]);
-
-        $this->userRepo->updateProfile($id, [
-            'first_name' => $this->getPost('first_name'),
-            'last_name'  => $this->getPost('last_name'),
-            'rank'       => $this->getPost('rank')  ?: null,
-            'phone'      => $this->getPost('phone') ?: null,
-            'bio'        => $this->getPost('bio')   ?: null,
-        ]);
+        if ($section === 'account') {
+            $roleId = (int)$this->getPost('role_id');
+            if ($roleId > 0) {
+                $this->userRepo->updateUser($id, [
+                    'role_id'   => $roleId,
+                    'is_active' => $this->getPost('is_active') === '1' ? 1 : 0,
+                ]);
+            }
+        } else {
+            $this->userRepo->updateProfile($id, [
+                'first_name' => $this->getPost('first_name'),
+                'last_name'  => $this->getPost('last_name'),
+                'rank'       => $this->getPost('rank')  ?: null,
+                'phone'      => $this->getPost('phone') ?: null,
+                'bio'        => $this->getPost('bio')   ?: null,
+            ]);
+        }
 
         SessionService::flash('success', 'Dane użytkownika zostały zaktualizowane.');
-        $this->redirect('/users');
+        $this->redirect('/users/' . $id . '/edit');
     }
 
     public function delete(): void
@@ -94,6 +100,14 @@ class UserController extends AppController
         $userId  = (int)SessionService::get('user_id');
         $user    = $this->userRepo->getUserById($userId);
         $profile = $this->userRepo->getProfileByUserId($userId);
+
+        // Zabezpieczenie: user nie powinien być null dla zalogowanego,
+        // ale jeśli sesja jest stale (np. konto usunięte) – wyloguj
+        if (!$user) {
+            SessionService::destroy();
+            $this->redirect('/login');
+            return;
+        }
 
         $this->render('users/profile', [
             'user'    => $user,

@@ -29,7 +29,7 @@ ob_start();
   <div class="grid-3 equip-stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:2rem">
     <div class="stat-card">
       <div class="stat-card__label">
-        Total
+        Łącznie
         <span class="material-symbols-outlined">inventory_2</span>
       </div>
       <div>
@@ -39,7 +39,7 @@ ob_start();
     </div>
     <div class="stat-card">
       <div class="stat-card__label">
-        Ready
+        Gotowy
         <span class="material-symbols-outlined" style="color:var(--color-success)">check_circle</span>
       </div>
       <div>
@@ -49,7 +49,7 @@ ob_start();
     </div>
     <div class="stat-card">
       <div class="stat-card__label">
-        In Use
+        W użyciu
         <span class="material-symbols-outlined" style="color:var(--color-info)">sync</span>
       </div>
       <div>
@@ -59,7 +59,7 @@ ob_start();
     </div>
     <div class="stat-card stat-card--critical">
       <div class="stat-card__label">
-        Maintenance
+        Serwis
         <span class="material-symbols-outlined" style="color:var(--color-warning)">build</span>
       </div>
       <div>
@@ -103,7 +103,7 @@ ob_start();
         <div style="width:3rem;height:3rem;background:var(--color-surface-highest);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center">
           <span class="material-symbols-outlined" style="color:var(--color-text-dim)">handheld_controller</span>
         </div>
-        <span class="badge <?= htmlspecialchars($eq->getStatusBadgeClass()) ?>"><?= htmlspecialchars($eq->getStatus()) ?></span>
+        <span class="badge <?= htmlspecialchars($eq->getStatusBadgeClass()) ?>"><?= htmlspecialchars($eq->getStatusLabel()) ?></span>
       </div>
 
       <!-- Name & Serial -->
@@ -163,7 +163,7 @@ ob_start();
   <div style="margin-top:2rem;display:flex;justify-content:center">
     <a href="/equipment/new" class="btn btn--primary btn--lg">
       <span class="material-symbols-outlined">add</span>
-      Register New Gear
+      Zarejestruj nowy sprzęt
     </a>
   </div>
   <?php endif; ?>
