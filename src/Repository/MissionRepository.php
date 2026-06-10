@@ -113,7 +113,7 @@ class MissionRepository
     public function getMissionRescuers(int $missionId): array
     {
         $stmt = $this->db->prepare('
-            SELECT u.id, u.username, u.email, p.first_name, p.last_name,
+            SELECT u.id AS user_id, u.username, u.email, p.first_name, p.last_name,
                    p.rank, mr.role AS mission_role, mr.assigned_at
             FROM mission_rescuers mr
             JOIN users    u ON mr.user_id  = u.id
