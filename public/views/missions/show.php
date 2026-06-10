@@ -1,6 +1,7 @@
 <?php
 $pageTitle  = htmlspecialchars($mission->getTitle());
 $activePage = 'missions';
+$needsMap   = true;
 ob_start();
 ?>
 
@@ -32,7 +33,7 @@ ob_start();
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.5rem">
           <span class="material-symbols-outlined" style="color:var(--color-primary)">emergency_share</span>
           <h2 style="font-family:var(--font-headline);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em">
-            Incident Details
+            Szczegóły Zdarzenia
           </h2>
         </div>
 
@@ -43,7 +44,7 @@ ob_start();
           </div>
           <div>
             <div class="form-label">Status</div>
-            <span class="badge <?= htmlspecialchars($mission->getStatusBadgeClass()) ?>"><?= htmlspecialchars($mission->getStatus()) ?></span>
+            <span class="badge <?= htmlspecialchars($mission->getStatusBadgeClass()) ?>"><?= htmlspecialchars($mission->getStatusLabel()) ?></span>
           </div>
           <div>
             <div class="form-label">Lokalizacja</div>
@@ -83,6 +84,19 @@ ob_start();
         </div>
         <?php endif; ?>
       </div>
+
+      <?php if ($mission->getCoordinates()): ?>
+      <!-- Mapa lokalizacji -->
+      <div class="card" style="margin-top:1.5rem">
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1rem">
+          <span class="material-symbols-outlined" style="color:var(--color-primary)">map</span>
+          <h2 style="font-family:var(--font-headline);font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em">
+            Lokalizacja akcji
+          </h2>
+        </div>
+        <div id="missionMap" style="height:280px;border-radius:var(--radius-sm);overflow:hidden;background:var(--color-surface-mid)"></div>
+      </div>
+      <?php endif; ?>
     </div>
 
     <!-- ===== PRAWA KOLUMNA ===== -->
@@ -93,7 +107,7 @@ ob_start();
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem">
           <span class="material-symbols-outlined" style="color:var(--color-primary)">groups</span>
           <h3 style="font-family:var(--font-headline);font-size:0.875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em">
-            Deployment Team
+            Zespół Ratowniczy
           </h3>
         </div>
 
@@ -160,7 +174,7 @@ ob_start();
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:1.25rem">
           <span class="material-symbols-outlined" style="color:var(--color-primary)">inventory</span>
           <h3 style="font-family:var(--font-headline);font-size:0.875rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em">
-            Equipment Log
+            Dziennik Sprzętu
           </h3>
         </div>
 
@@ -213,6 +227,53 @@ ob_start();
     </div>
   </div>
 </main>
+
+<?php if ($mission->getCoordinates()): ?>
+<script>
+(function () {
+  var raw = <?= json_encode($mission->getCoordinates()) ?>;
+
+  // Parser DMS → decimal: obsługuje °, ', " oraz warianty cudzysłowów
+  function parseDMS(str) {
+    // Zamień wszelkie cudzysłowy i apostrofy na standardowe
+    str = str.replace(/['']/g, "'").replace(/[""]/g, '"');
+    // Wzorzec: stopnie°minuty'sekundy" kierunek
+    var re = /(\d+)[°](\d+)['](\d+(?:\.\d+)?)["]?\s*([NnSs])[,\s]+(\d+)[°](\d+)['](\d+(?:\.\d+)?)["]?\s*([EeWw])/;
+    var m = str.match(re);
+    if (!m) return null;
+    var lat = +m[1] + +m[2]/60 + +m[3]/3600;
+    if (m[4].toUpperCase() === 'S') lat = -lat;
+    var lon = +m[5] + +m[6]/60 + +m[7]/3600;
+    if (m[8].toUpperCase() === 'W') lon = -lon;
+    return [lat, lon];
+  }
+
+  var coords = parseDMS(raw);
+  if (!coords) return;
+
+  var map = L.map('missionMap', { zoomControl: true, scrollWheelZoom: false }).setView(coords, 13);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    maxZoom: 18
+  }).addTo(map);
+
+  // Czerwony marker taktyczny
+  var icon = L.divIcon({
+    className: '',
+    html: '<div style="width:20px;height:20px;background:var(--color-primary,#e53e3e);border:3px solid #fff;border-radius:50%;box-shadow:0 0 0 3px rgba(229,62,62,0.35),0 2px 8px rgba(0,0,0,0.5)"></div>',
+    iconSize: [20, 20],
+    iconAnchor: [10, 10]
+  });
+
+  var marker = L.marker(coords, { icon: icon }).addTo(map);
+  marker.bindPopup(
+    '<strong><?= addslashes(htmlspecialchars($mission->getLocation())) ?></strong><br>'
+    + '<span style="font-size:0.75rem;color:#888">' + raw + '</span>'
+  ).openPopup();
+})();
+</script>
+<?php endif; ?>
 
 <?php
 $content = ob_get_clean();
