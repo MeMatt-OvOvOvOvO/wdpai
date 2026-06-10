@@ -28,7 +28,7 @@ class MissionController extends AppController
 
     public function create(): void
     {
-        SessionService::requireLogin();
+        SessionService::requireCoordinator();
 
         $incidentTypes = $this->missionRepo->getIncidentTypes();
         $rescuers      = $this->userRepo->getAllUsers();
@@ -41,7 +41,7 @@ class MissionController extends AppController
 
     public function store(): void
     {
-        SessionService::requireLogin();
+        SessionService::requireCoordinator();
 
         $title          = $this->getPost('title');
         $location       = $this->getPost('location');
