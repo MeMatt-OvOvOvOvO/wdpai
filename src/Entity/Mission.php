@@ -59,6 +59,17 @@ class Mission
     public function isActive(): bool    { return in_array($this->status, ['open', 'active']); }
     public function isCompleted(): bool { return $this->status === 'completed'; }
 
+    public function getStatusLabel(): string
+    {
+        return match($this->status) {
+            'active'    => 'Aktywna',
+            'open'      => 'Otwarta',
+            'completed' => 'Zakończona',
+            'cancelled' => 'Anulowana',
+            default     => $this->status,
+        };
+    }
+
     public function getStatusBadgeClass(): string
     {
         return match($this->status) {

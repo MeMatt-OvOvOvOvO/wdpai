@@ -52,6 +52,18 @@ class Equipment
     public function isInUse(): bool       { return $this->status === 'in_use'; }
     public function isMaintenance(): bool { return $this->status === 'maintenance'; }
 
+    public function getStatusLabel(): string
+    {
+        return match($this->status) {
+            'ready'       => 'Gotowy',
+            'in_use'      => 'W użyciu',
+            'maintenance' => 'Serwis',
+            'retired'     => 'Wycofany',
+            'lost'        => 'Zaginiony',
+            default       => $this->status,
+        };
+    }
+
     public function getStatusBadgeClass(): string
     {
         return match($this->status) {
