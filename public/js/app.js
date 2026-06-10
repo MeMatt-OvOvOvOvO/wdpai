@@ -19,14 +19,41 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 2. Global search – filters table rows and equipment cards
+  // 2. Global search – filters table rows and equipment cards (or redirects)
   const searchInput = document.getElementById('globalSearch');
   if (searchInput) {
-    searchInput.addEventListener('input', e => {
-      const q = e.target.value.toLowerCase();
-      document.querySelectorAll('tr[data-search], .equip-card[data-search]').forEach(el => {
+    const searchableEls = () => document.querySelectorAll('tr[data-search], .equip-card[data-search]');
+
+    // Pre-fill from URL ?q= param and apply immediately
+    const urlQ = new URLSearchParams(window.location.search).get('q');
+    if (urlQ) {
+      searchInput.value = urlQ;
+      const q = urlQ.toLowerCase();
+      searchableEls().forEach(el => {
         el.style.display = el.dataset.search.toLowerCase().includes(q) ? '' : 'none';
       });
+    }
+
+    searchInput.addEventListener('input', e => {
+      const q = e.target.value.toLowerCase();
+      const els = searchableEls();
+      if (els.length > 0) {
+        // Na stronie z wynikami – filtruj na bieżąco
+        els.forEach(el => {
+          el.style.display = el.dataset.search.toLowerCase().includes(q) ? '' : 'none';
+        });
+      }
+    });
+
+    searchInput.addEventListener('keydown', e => {
+      if (e.key !== 'Enter') return;
+      const q = searchInput.value.trim();
+      if (!q) return;
+      const els = searchableEls();
+      if (els.length === 0) {
+        // Na stronie bez wyników – przekieruj do listy misji z zapytaniem
+        window.location.href = '/missions?q=' + encodeURIComponent(q);
+      }
     });
   }
 
@@ -168,7 +195,7 @@ function initOpsMap() {
                     .bindPopup(
                         '<strong>' + escapeHtml(mission.title) + '</strong><br>' +
                         escapeHtml(mission.location) + '<br>' +
-                        'Status: ' + escapeHtml(mission.status) + '<br>' +
+                        'Status: ' + escapeHtml({active:'Aktywna',open:'Otwarta',completed:'Zakończona',cancelled:'Anulowana'}[mission.status] || mission.status) + '<br>' +
                         '<a href="/missions/' + encodeURIComponent(mission.id) + '">Szczegóły akcji →</a>'
                     );
             });
@@ -207,6 +234,7 @@ function escapeHtml(value) {
 function confirmDelete(msg) {
   return confirm(msg || 'Czy na pewno chcesz usunąć ten element?');
 }
+
 
 // ============================================================
 // 9. Form validation (wzorzec z zajęć)
