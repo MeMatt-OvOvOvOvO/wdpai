@@ -117,6 +117,10 @@ kontenera bazy danych.
 
 ### Diagram ERD
 
+![ERD](docs/erd.svg)
+
+> Diagram dostępny też w wersji tekstowej (Mermaid) poniżej — renderuje się automatycznie na GitHub.
+
 ```mermaid
 erDiagram
     ROLES ||--o{ USERS : "określa rolę"
@@ -143,7 +147,7 @@ erDiagram
         bool is_active
     }
     PROFILES {
-        int user_id PK_FK "1:1 z users"
+        int user_id PK "1:1 z users (FK)"
         string first_name
         string last_name
         string rank
@@ -182,8 +186,8 @@ erDiagram
         int service_life_pct
     }
     MISSION_RESCUERS {
-        int mission_id PK_FK
-        int user_id PK_FK
+        int mission_id PK
+        int user_id PK
         string role "leader/medic/rescuer"
         timestamptz assigned_at
     }
@@ -363,14 +367,14 @@ prowadzącego):
 
 ### Konta testowe
 
-Dane logowania do przykładowych kont (hasło dla wszystkich: `password123`):
+Dane logowania do przykładowych kont (hasło dla wszystkich: `password`):
 
-| Rola          | E-mail                  | Hasło         |
-|---------------|-------------------------|---------------|
-| Koordynator   | koordynator@topr.pl     | password123   |
-| Ratownik      | ratownik1@topr.pl       | password123   |
-| Ratownik      | ratownik2@topr.pl       | password123   |
-| Ratownik      | ratownik3@topr.pl       | password123   |
+| Rola          | E-mail                  | Hasło      |
+|---------------|-------------------------|------------|
+| Koordynator   | koordynator@topr.pl     | password   |
+| Ratownik      | ratownik1@topr.pl       | password   |
+| Ratownik      | ratownik2@topr.pl       | password   |
+| Ratownik      | ratownik3@topr.pl       | password   |
 
 ### Restart "od zera"
 
@@ -407,7 +411,7 @@ docker-compose up --build
 
 Poniższy scenariusz pozwala ręcznie zweryfikować kluczowe funkcje aplikacji:
 
-1. **Logowanie** — wejdź na `/login`, zaloguj się jako `koordynator@topr.pl` / `password123`.
+1. **Logowanie** — wejdź na `/login`, zaloguj się jako `koordynator@topr.pl` / `password`.
    Sprawdź, że po poprawnym logowaniu trafiasz na `/dashboard`.
 2. **Walidacja i CSRF** — spróbuj wysłać formularz logowania z niepoprawnym formatem e-maila —
    pole powinno zostać oznaczone na czerwono (walidacja JS), a po wysłaniu serwer zwróci komunikat
@@ -509,13 +513,45 @@ TEST_COORDINATOR_PASSWORD=password123 \
 
 ## Zrzuty ekranu
 
-> _Miejsce na zrzuty ekranu kluczowych widoków aplikacji — uzupełnij przed oddaniem projektu:_
+### Logowanie
 
-- Ekran logowania
-- Dashboard koordynatora (statystyki, mapa, brief taktyczny)
-- Lista akcji ratunkowych i widok szczegółów akcji
-- Moduł sprzętu (lista, status, formularz dodawania)
-- Zarządzanie użytkownikami (widok koordynatora) i profil użytkownika
+| Desktop | Mobile |
+|---------|--------|
+| ![Logowanie – desktop](docs/screenshots/Screenshot-2026-06-09-at-23.15.04.png) | ![Logowanie – mobile](docs/screenshots/Screenshot-2026-06-09-at-23.31.51.png) |
+
+### Dashboard
+
+| Desktop | Mobile |
+|---------|--------|
+| ![Dashboard – desktop](docs/screenshots/Screenshot-2026-06-09-at-23.15.36.png) | ![Dashboard – mobile](docs/screenshots/Screenshot-2026-06-09-at-23.32.13.png) |
+
+### Nawigacja mobilna (sidebar)
+
+![Sidebar – mobile](docs/screenshots/Screenshot-2026-06-09-at-23.32.21.png)
+
+### Lista akcji ratunkowych
+
+| Desktop | Mobile |
+|---------|--------|
+| ![Akcje – desktop](docs/screenshots/Screenshot-2026-06-09-at-23.16.02.png) | ![Akcje – mobile](docs/screenshots/Screenshot-2026-06-09-at-23.36.56.png) |
+
+### Szczegóły akcji ratunkowej (z mapą GPS)
+
+| Desktop | Mobile |
+|---------|--------|
+| ![Szczegóły akcji – desktop](docs/screenshots/Screenshot-2026-06-09-at-23.16.22.png) | ![Szczegóły akcji – mobile](docs/screenshots/Screenshot-2026-06-09-at-23.37.24.png) |
+
+### Sprzęt ratunkowy
+
+| Desktop | Mobile |
+|---------|--------|
+| ![Sprzęt – desktop](docs/screenshots/Screenshot-2026-06-09-at-23.30.04.png) | ![Sprzęt – mobile](docs/screenshots/Screenshot-2026-06-09-at-23.32.44.png) |
+
+### Zarządzanie użytkownikami i profil
+
+| Lista użytkowników (koordynator) | Profil użytkownika (mobile) |
+|----------------------------------|------------------------------|
+| ![Użytkownicy – desktop](docs/screenshots/Screenshot-2026-06-09-at-23.30.20.png) | ![Profil – mobile](docs/screenshots/Screenshot-2026-06-09-at-23.32.59.png) |
 
 ---
 

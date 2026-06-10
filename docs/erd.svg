@@ -1,0 +1,231 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 920" width="1400" height="920">
+<rect width="1400" height="920" fill="#0c0e10"/>
+<defs>
+<marker id="arr" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto"><path d="M0,0 L0,7 L9,3.5 Z" fill="#cc0000"/></marker>
+</defs>
+<line x1="177" y1="111" x2="457" y2="163" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr)" opacity="0.6"/>
+<rect x="302.0" y="129.0" width="30" height="15" rx="3" fill="#0c0e10"/>
+<text x="317.0" y="141.0" text-anchor="middle" font-size="9" font-family="monospace" fill="#667">1:N</text>
+<line x1="457" y1="163" x2="742" y2="153" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr)" opacity="0.6"/>
+<rect x="584.5" y="150.0" width="30" height="15" rx="3" fill="#0c0e10"/>
+<text x="599.5" y="162.0" text-anchor="middle" font-size="9" font-family="monospace" fill="#667">1:1</text>
+<line x1="457" y1="163" x2="457" y2="465" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr)" opacity="0.6"/>
+<rect x="442.0" y="306.0" width="30" height="15" rx="3" fill="#0c0e10"/>
+<text x="457.0" y="318.0" text-anchor="middle" font-size="9" font-family="monospace" fill="#667">1:N</text>
+<line x1="177" y1="381" x2="457" y2="465" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr)" opacity="0.6"/>
+<rect x="302.0" y="415.0" width="30" height="15" rx="3" fill="#0c0e10"/>
+<text x="317.0" y="427.0" text-anchor="middle" font-size="9" font-family="monospace" fill="#667">1:N</text>
+<line x1="457" y1="465" x2="807" y2="402" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr)" opacity="0.6"/>
+<rect x="617.0" y="425.5" width="30" height="15" rx="3" fill="#0c0e10"/>
+<text x="632.0" y="437.5" text-anchor="middle" font-size="9" font-family="monospace" fill="#667">1:N</text>
+<line x1="457" y1="163" x2="807" y2="402" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr)" opacity="0.6"/>
+<rect x="617.0" y="274.5" width="30" height="15" rx="3" fill="#0c0e10"/>
+<text x="632.0" y="286.5" text-anchor="middle" font-size="9" font-family="monospace" fill="#667">1:N</text>
+<line x1="457" y1="465" x2="807" y2="763" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr)" opacity="0.6"/>
+<rect x="617.0" y="606.0" width="30" height="15" rx="3" fill="#0c0e10"/>
+<text x="632.0" y="618.0" text-anchor="middle" font-size="9" font-family="monospace" fill="#667">1:N</text>
+<line x1="1227" y1="433" x2="807" y2="763" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr)" opacity="0.6"/>
+<rect x="1002.0" y="590.0" width="30" height="15" rx="3" fill="#0c0e10"/>
+<text x="1017.0" y="602.0" text-anchor="middle" font-size="9" font-family="monospace" fill="#667">1:N</text>
+<line x1="1227" y1="121" x2="1227" y2="433" stroke="#cc0000" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arr)" opacity="0.6"/>
+<rect x="1212.0" y="269.0" width="30" height="15" rx="3" fill="#0c0e10"/>
+<text x="1227.0" y="281.0" text-anchor="middle" font-size="9" font-family="monospace" fill="#667">1:N</text>
+<rect x="54" y="74" width="255" height="82" rx="5" fill="#cc0000" opacity="0.12"/>
+<rect x="50" y="70" width="255" height="82" rx="5" fill="#1a1c1e" stroke="#3a1c1c" stroke-width="1.5"/>
+<rect x="50" y="70" width="255" height="32" rx="5" fill="#cc0000"/>
+<rect x="50" y="97" width="255" height="5" fill="#cc0000"/>
+<text x="177" y="91" text-anchor="middle" font-size="11" font-weight="bold" font-family="monospace" fill="#ffffff" letter-spacing="1">ROLES</text>
+<rect x="51" y="106" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="55" y="109" width="20" height="15" rx="2" fill="#8b0000"/>
+<text x="59" y="120" font-size="8" font-family="monospace" fill="white">PK</text>
+<text x="82" y="120" font-size="10" font-family="monospace" fill="#e8bdb6">id</text>
+<text x="299" y="120" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="55" y="141" font-size="10" font-family="monospace" fill="#e2e2e5">name</text>
+<text x="299" y="141" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="334" y="74" width="255" height="187" rx="5" fill="#cc0000" opacity="0.12"/>
+<rect x="330" y="70" width="255" height="187" rx="5" fill="#1a1c1e" stroke="#3a1c1c" stroke-width="1.5"/>
+<rect x="330" y="70" width="255" height="32" rx="5" fill="#cc0000"/>
+<rect x="330" y="97" width="255" height="5" fill="#cc0000"/>
+<text x="457" y="91" text-anchor="middle" font-size="11" font-weight="bold" font-family="monospace" fill="#ffffff" letter-spacing="1">USERS</text>
+<rect x="331" y="106" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="335" y="109" width="20" height="15" rx="2" fill="#8b0000"/>
+<text x="339" y="120" font-size="8" font-family="monospace" fill="white">PK</text>
+<text x="362" y="120" font-size="10" font-family="monospace" fill="#e8bdb6">id</text>
+<text x="579" y="120" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="335" y="141" font-size="10" font-family="monospace" fill="#e2e2e5">username</text>
+<text x="579" y="141" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="331" y="148" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="335" y="162" font-size="10" font-family="monospace" fill="#e2e2e5">email</text>
+<text x="579" y="162" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<text x="335" y="183" font-size="10" font-family="monospace" fill="#e2e2e5">password</text>
+<text x="579" y="183" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="331" y="190" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="335" y="193" width="20" height="15" rx="2" fill="#4a1a6b"/>
+<text x="339" y="204" font-size="8" font-family="monospace" fill="white">FK</text>
+<text x="362" y="204" font-size="10" font-family="monospace" fill="#ae8882">role_id</text>
+<text x="579" y="204" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="335" y="225" font-size="10" font-family="monospace" fill="#e2e2e5">is_active</text>
+<text x="579" y="225" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">bool</text>
+<rect x="331" y="232" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="335" y="246" font-size="10" font-family="monospace" fill="#e2e2e5">created_at</text>
+<text x="579" y="246" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">timestamptz</text>
+<rect x="619" y="74" width="255" height="166" rx="5" fill="#cc0000" opacity="0.12"/>
+<rect x="615" y="70" width="255" height="166" rx="5" fill="#1a1c1e" stroke="#3a1c1c" stroke-width="1.5"/>
+<rect x="615" y="70" width="255" height="32" rx="5" fill="#cc0000"/>
+<rect x="615" y="97" width="255" height="5" fill="#cc0000"/>
+<text x="742" y="91" text-anchor="middle" font-size="11" font-weight="bold" font-family="monospace" fill="#ffffff" letter-spacing="1">PROFILES</text>
+<rect x="616" y="106" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="620" y="109" width="38" height="15" rx="2" fill="#6b3000"/>
+<text x="624" y="120" font-size="8" font-family="monospace" fill="white">PK/FK</text>
+<text x="665" y="120" font-size="10" font-family="monospace" fill="#e8bdb6">user_id</text>
+<text x="864" y="120" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="620" y="141" font-size="10" font-family="monospace" fill="#e2e2e5">first_name</text>
+<text x="864" y="141" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="616" y="148" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="620" y="162" font-size="10" font-family="monospace" fill="#e2e2e5">last_name</text>
+<text x="864" y="162" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<text x="620" y="183" font-size="10" font-family="monospace" fill="#e2e2e5">rank</text>
+<text x="864" y="183" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="616" y="190" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="620" y="204" font-size="10" font-family="monospace" fill="#e2e2e5">phone</text>
+<text x="864" y="204" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<text x="620" y="225" font-size="10" font-family="monospace" fill="#e2e2e5">bio</text>
+<text x="864" y="225" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">text</text>
+<rect x="54" y="344" width="255" height="82" rx="5" fill="#cc0000" opacity="0.12"/>
+<rect x="50" y="340" width="255" height="82" rx="5" fill="#1a1c1e" stroke="#3a1c1c" stroke-width="1.5"/>
+<rect x="50" y="340" width="255" height="32" rx="5" fill="#cc0000"/>
+<rect x="50" y="367" width="255" height="5" fill="#cc0000"/>
+<text x="177" y="361" text-anchor="middle" font-size="11" font-weight="bold" font-family="monospace" fill="#ffffff" letter-spacing="1">INCIDENT_TYPES</text>
+<rect x="51" y="376" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="55" y="379" width="20" height="15" rx="2" fill="#8b0000"/>
+<text x="59" y="390" font-size="8" font-family="monospace" fill="white">PK</text>
+<text x="82" y="390" font-size="10" font-family="monospace" fill="#e8bdb6">id</text>
+<text x="299" y="390" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="55" y="411" font-size="10" font-family="monospace" fill="#e2e2e5">name</text>
+<text x="299" y="411" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="334" y="344" width="255" height="250" rx="5" fill="#cc0000" opacity="0.12"/>
+<rect x="330" y="340" width="255" height="250" rx="5" fill="#1a1c1e" stroke="#3a1c1c" stroke-width="1.5"/>
+<rect x="330" y="340" width="255" height="32" rx="5" fill="#cc0000"/>
+<rect x="330" y="367" width="255" height="5" fill="#cc0000"/>
+<text x="457" y="361" text-anchor="middle" font-size="11" font-weight="bold" font-family="monospace" fill="#ffffff" letter-spacing="1">MISSIONS</text>
+<rect x="331" y="376" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="335" y="379" width="20" height="15" rx="2" fill="#8b0000"/>
+<text x="339" y="390" font-size="8" font-family="monospace" fill="white">PK</text>
+<text x="362" y="390" font-size="10" font-family="monospace" fill="#e8bdb6">id</text>
+<text x="579" y="390" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="335" y="411" font-size="10" font-family="monospace" fill="#e2e2e5">title</text>
+<text x="579" y="411" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="331" y="418" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="335" y="432" font-size="10" font-family="monospace" fill="#e2e2e5">location</text>
+<text x="579" y="432" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<text x="335" y="453" font-size="10" font-family="monospace" fill="#e2e2e5">coordinates</text>
+<text x="579" y="453" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="331" y="460" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="335" y="463" width="20" height="15" rx="2" fill="#4a1a6b"/>
+<text x="339" y="474" font-size="8" font-family="monospace" fill="white">FK</text>
+<text x="362" y="474" font-size="10" font-family="monospace" fill="#ae8882">incident_type_id</text>
+<text x="579" y="474" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="335" y="495" font-size="10" font-family="monospace" fill="#e2e2e5">status</text>
+<text x="579" y="495" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="331" y="502" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="335" y="516" font-size="10" font-family="monospace" fill="#e2e2e5">start_time</text>
+<text x="579" y="516" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">timestamptz</text>
+<text x="335" y="537" font-size="10" font-family="monospace" fill="#e2e2e5">end_time</text>
+<text x="579" y="537" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">timestamptz</text>
+<rect x="331" y="544" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="335" y="547" width="20" height="15" rx="2" fill="#4a1a6b"/>
+<text x="339" y="558" font-size="8" font-family="monospace" fill="white">FK</text>
+<text x="362" y="558" font-size="10" font-family="monospace" fill="#ae8882">created_by</text>
+<text x="579" y="558" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="335" y="579" font-size="10" font-family="monospace" fill="#e2e2e5">description</text>
+<text x="579" y="579" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">text</text>
+<rect x="684" y="344" width="255" height="124" rx="5" fill="#cc0000" opacity="0.12"/>
+<rect x="680" y="340" width="255" height="124" rx="5" fill="#1a1c1e" stroke="#3a1c1c" stroke-width="1.5"/>
+<rect x="680" y="340" width="255" height="32" rx="5" fill="#cc0000"/>
+<rect x="680" y="367" width="255" height="5" fill="#cc0000"/>
+<text x="807" y="361" text-anchor="middle" font-size="11" font-weight="bold" font-family="monospace" fill="#ffffff" letter-spacing="1">MISSION_RESCUERS</text>
+<rect x="681" y="376" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="685" y="379" width="38" height="15" rx="2" fill="#6b3000"/>
+<text x="689" y="390" font-size="8" font-family="monospace" fill="white">PK/FK</text>
+<text x="730" y="390" font-size="10" font-family="monospace" fill="#e8bdb6">mission_id</text>
+<text x="929" y="390" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<rect x="685" y="400" width="38" height="15" rx="2" fill="#6b3000"/>
+<text x="689" y="411" font-size="8" font-family="monospace" fill="white">PK/FK</text>
+<text x="730" y="411" font-size="10" font-family="monospace" fill="#e8bdb6">user_id</text>
+<text x="929" y="411" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<rect x="681" y="418" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="685" y="432" font-size="10" font-family="monospace" fill="#e2e2e5">role</text>
+<text x="929" y="432" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<text x="685" y="453" font-size="10" font-family="monospace" fill="#e2e2e5">assigned_at</text>
+<text x="929" y="453" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">timestamptz</text>
+<rect x="1104" y="74" width="255" height="103" rx="5" fill="#cc0000" opacity="0.12"/>
+<rect x="1100" y="70" width="255" height="103" rx="5" fill="#1a1c1e" stroke="#3a1c1c" stroke-width="1.5"/>
+<rect x="1100" y="70" width="255" height="32" rx="5" fill="#cc0000"/>
+<rect x="1100" y="97" width="255" height="5" fill="#cc0000"/>
+<text x="1227" y="91" text-anchor="middle" font-size="11" font-weight="bold" font-family="monospace" fill="#ffffff" letter-spacing="1">EQUIPMENT_TYPES</text>
+<rect x="1101" y="106" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="1105" y="109" width="20" height="15" rx="2" fill="#8b0000"/>
+<text x="1109" y="120" font-size="8" font-family="monospace" fill="white">PK</text>
+<text x="1132" y="120" font-size="10" font-family="monospace" fill="#e8bdb6">id</text>
+<text x="1349" y="120" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="1105" y="141" font-size="10" font-family="monospace" fill="#e2e2e5">name</text>
+<text x="1349" y="141" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="1101" y="148" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="1105" y="162" font-size="10" font-family="monospace" fill="#e2e2e5">description</text>
+<text x="1349" y="162" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">text</text>
+<rect x="1104" y="344" width="255" height="187" rx="5" fill="#cc0000" opacity="0.12"/>
+<rect x="1100" y="340" width="255" height="187" rx="5" fill="#1a1c1e" stroke="#3a1c1c" stroke-width="1.5"/>
+<rect x="1100" y="340" width="255" height="32" rx="5" fill="#cc0000"/>
+<rect x="1100" y="367" width="255" height="5" fill="#cc0000"/>
+<text x="1227" y="361" text-anchor="middle" font-size="11" font-weight="bold" font-family="monospace" fill="#ffffff" letter-spacing="1">EQUIPMENT</text>
+<rect x="1101" y="376" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="1105" y="379" width="20" height="15" rx="2" fill="#8b0000"/>
+<text x="1109" y="390" font-size="8" font-family="monospace" fill="white">PK</text>
+<text x="1132" y="390" font-size="10" font-family="monospace" fill="#e8bdb6">id</text>
+<text x="1349" y="390" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="1105" y="411" font-size="10" font-family="monospace" fill="#e2e2e5">name</text>
+<text x="1349" y="411" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="1101" y="418" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="1105" y="432" font-size="10" font-family="monospace" fill="#e2e2e5">serial_number</text>
+<text x="1349" y="432" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<rect x="1105" y="442" width="20" height="15" rx="2" fill="#4a1a6b"/>
+<text x="1109" y="453" font-size="8" font-family="monospace" fill="white">FK</text>
+<text x="1132" y="453" font-size="10" font-family="monospace" fill="#ae8882">type_id</text>
+<text x="1349" y="453" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<rect x="1101" y="460" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="1105" y="474" font-size="10" font-family="monospace" fill="#e2e2e5">status</text>
+<text x="1349" y="474" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">varchar</text>
+<text x="1105" y="495" font-size="10" font-family="monospace" fill="#e2e2e5">last_inspection</text>
+<text x="1349" y="495" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">date</text>
+<rect x="1101" y="502" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="1105" y="516" font-size="10" font-family="monospace" fill="#e2e2e5">service_life_pct</text>
+<text x="1349" y="516" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<rect x="684" y="684" width="255" height="166" rx="5" fill="#cc0000" opacity="0.12"/>
+<rect x="680" y="680" width="255" height="166" rx="5" fill="#1a1c1e" stroke="#3a1c1c" stroke-width="1.5"/>
+<rect x="680" y="680" width="255" height="32" rx="5" fill="#cc0000"/>
+<rect x="680" y="707" width="255" height="5" fill="#cc0000"/>
+<text x="807" y="701" text-anchor="middle" font-size="11" font-weight="bold" font-family="monospace" fill="#ffffff" letter-spacing="1">EQUIPMENT_LOANS</text>
+<rect x="681" y="716" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="685" y="719" width="20" height="15" rx="2" fill="#8b0000"/>
+<text x="689" y="730" font-size="8" font-family="monospace" fill="white">PK</text>
+<text x="712" y="730" font-size="10" font-family="monospace" fill="#e8bdb6">id</text>
+<text x="929" y="730" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<rect x="685" y="740" width="20" height="15" rx="2" fill="#4a1a6b"/>
+<text x="689" y="751" font-size="8" font-family="monospace" fill="white">FK</text>
+<text x="712" y="751" font-size="10" font-family="monospace" fill="#ae8882">mission_id</text>
+<text x="929" y="751" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<rect x="681" y="758" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<rect x="685" y="761" width="20" height="15" rx="2" fill="#4a1a6b"/>
+<text x="689" y="772" font-size="8" font-family="monospace" fill="white">FK</text>
+<text x="712" y="772" font-size="10" font-family="monospace" fill="#ae8882">equipment_id</text>
+<text x="929" y="772" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<text x="685" y="793" font-size="10" font-family="monospace" fill="#e2e2e5">quantity</text>
+<text x="929" y="793" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">int</text>
+<rect x="681" y="800" width="253" height="21" fill="rgba(255,255,255,0.025)" rx="0"/>
+<text x="685" y="814" font-size="10" font-family="monospace" fill="#e2e2e5">loaned_at</text>
+<text x="929" y="814" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">timestamptz</text>
+<text x="685" y="835" font-size="10" font-family="monospace" fill="#e2e2e5">returned_at</text>
+<text x="929" y="835" text-anchor="end" font-size="9" font-family="monospace" fill="#667" font-style="italic">timestamptz</text>
+<text x="700" y="30" text-anchor="middle" font-size="15" font-weight="bold" font-family="monospace" fill="#ffffff" letter-spacing="2">TOPR RESCUE — DATABASE SCHEMA (ERD)</text>
+<text x="700" y="48" text-anchor="middle" font-size="10" font-family="monospace" fill="#667">PostgreSQL 16 · 9 tables · 1:1, 1:N, M:N relations</text>
+</svg>
