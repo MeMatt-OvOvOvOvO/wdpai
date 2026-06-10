@@ -135,6 +135,7 @@
   </div>
 </div>
 
+<script src="/public/js/app.js"></script>
 <script>
 function togglePassword() {
   const field = document.getElementById('passwordField');
