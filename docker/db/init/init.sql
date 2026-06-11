@@ -258,7 +258,7 @@ INSERT INTO equipment_types (name, description) VALUES
     ('Łączność',                   'Radiotelefony, telefony satelitarne'),
     ('Odzież i ochrona osobista',  'Kaski, raki, kombinezony');
 
--- Użytkownicy (hasła: "password123" zaszyfrowane bcrypt)
+-- Użytkownicy (hasła: "password" zaszyfrowane bcrypt)
 INSERT INTO users (username, email, password, role_id) VALUES
     ('koordynator',  'koordynator@topr.pl',
      '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 1),
