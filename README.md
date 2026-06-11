@@ -94,15 +94,69 @@ erDiagram
     INCIDENT_TYPES ||--o{ MISSIONS : "kategoryzuje"
     EQUIPMENT_TYPES ||--o{ EQUIPMENT : "kategoryzuje"
 
-    ROLES { int id PK; string name "coordinator / rescuer" }
-    USERS { int id PK; string username; string email; string password "hash bcrypt"; int role_id FK; timestamptz created_at; bool is_active }
-    PROFILES { int user_id PK "1:1 z users (FK)"; string first_name; string last_name; string rank; string phone; text bio }
-    INCIDENT_TYPES { int id PK; string name }
-    MISSIONS { int id PK; string title; string location; string coordinates; int incident_type_id FK; string status "open/active/completed/cancelled"; timestamptz start_time; timestamptz end_time; int created_by FK }
-    EQUIPMENT_TYPES { int id PK; string name }
-    EQUIPMENT { int id PK; string name; string serial_number; int type_id FK; string status "ready/in_use/maintenance/retired/lost"; date last_inspection; int service_life_pct }
-    MISSION_RESCUERS { int mission_id PK; int user_id PK; string role "leader/medic/rescuer"; timestamptz assigned_at }
-    EQUIPMENT_LOANS { int id PK; int mission_id FK; int equipment_id FK; int quantity; timestamptz loaned_at; timestamptz returned_at }
+    ROLES {
+        int id PK
+        string name "coordinator / rescuer"
+    }
+    USERS {
+        int id PK
+        string username
+        string email
+        string password "hash bcrypt"
+        int role_id FK
+        timestamptz created_at
+        bool is_active
+    }
+    PROFILES {
+        int user_id PK "FK -> users"
+        string first_name
+        string last_name
+        string rank
+        string phone
+        text bio
+    }
+    INCIDENT_TYPES {
+        int id PK
+        string name
+    }
+    MISSIONS {
+        int id PK
+        string title
+        string location
+        string coordinates
+        int incident_type_id FK
+        string status "open/active/completed/cancelled"
+        timestamptz start_time
+        timestamptz end_time
+        int created_by FK
+    }
+    EQUIPMENT_TYPES {
+        int id PK
+        string name
+    }
+    EQUIPMENT {
+        int id PK
+        string name
+        string serial_number
+        int type_id FK
+        string status "ready/in_use/maintenance/retired/lost"
+        date last_inspection
+        int service_life_pct
+    }
+    MISSION_RESCUERS {
+        int mission_id PK
+        int user_id PK
+        string role "leader/medic/rescuer"
+        timestamptz assigned_at
+    }
+    EQUIPMENT_LOANS {
+        int id PK
+        int mission_id FK
+        int equipment_id FK
+        int quantity
+        timestamptz loaned_at
+        timestamptz returned_at
+    }
 ```
 
 ### Relacje
