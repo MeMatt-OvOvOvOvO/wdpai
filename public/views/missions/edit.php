@@ -46,7 +46,7 @@ ob_start();
           <?php foreach ($incidentTypes as $type): ?>
           <?php $typeId = $type['id'] ?? $type['incident_type_id'] ?? ''; ?>
           <option value="<?= htmlspecialchars($typeId) ?>"
-            <?= ($typeId == ($mission->getIncidentTypeName() ? '' : '')) ? '' : '' ?>>
+            <?= $typeId == $mission->getIncidentTypeId() ? 'selected' : '' ?>>
             <?= htmlspecialchars($type['name'] ?? $type['type_name'] ?? '') ?>
           </option>
           <?php endforeach; ?>
