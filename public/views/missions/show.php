@@ -233,11 +233,18 @@ ob_start();
 (function () {
   var raw = <?= json_encode($mission->getCoordinates()) ?>;
 
-  // Parser DMS → decimal: obsługuje °, ', " oraz warianty cudzysłowów
-  function parseDMS(str) {
-    // Zamień wszelkie cudzysłowy i apostrofy na standardowe
+  // Parser koordynatów – obsługuje dwa formaty:
+  // 1. Dziesiętny:  "49.2730,19.8970"
+  // 2. DMS:         "49°11'20\" N, 20°04'40\" E"
+  function parseCoords(str) {
+    if (!str) return null;
+
+    // Format dziesiętny: liczba,liczba
+    var dec = str.match(/^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$/);
+    if (dec) return [parseFloat(dec[1]), parseFloat(dec[2])];
+
+    // Format DMS
     str = str.replace(/['']/g, "'").replace(/[""]/g, '"');
-    // Wzorzec: stopnie°minuty'sekundy" kierunek
     var re = /(\d+)[°](\d+)['](\d+(?:\.\d+)?)["]?\s*([NnSs])[,\s]+(\d+)[°](\d+)['](\d+(?:\.\d+)?)["]?\s*([EeWw])/;
     var m = str.match(re);
     if (!m) return null;
@@ -248,7 +255,7 @@ ob_start();
     return [lat, lon];
   }
 
-  var coords = parseDMS(raw);
+  var coords = parseCoords(raw);
   if (!coords) return;
 
   var map = L.map('missionMap', { zoomControl: true, scrollWheelZoom: false }).setView(coords, 13);
