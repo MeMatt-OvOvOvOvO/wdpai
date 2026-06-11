@@ -197,7 +197,7 @@ fi
 section "Logowanie poprawnymi danymi i kontrola dostępu wg ról"
 
 COORD_EMAIL="${TEST_COORDINATOR_EMAIL:-koordynator@topr.pl}"
-COORD_PASSWORD="${TEST_COORDINATOR_PASSWORD:-password123}"
+COORD_PASSWORD="${TEST_COORDINATOR_PASSWORD:-password}"
 
 FRESH_TOKEN=$(curl -s -b "$COOKIE_JAR" -c "$COOKIE_JAR" "$BASE_URL/login" \
     | grep -o 'name="csrf_token" value="[^"]*"' | head -1 | sed -E 's/.*value="([^"]*)".*/\1/')
