@@ -205,6 +205,43 @@ FOR EACH ROW
 EXECUTE FUNCTION trigger_activate_mission();
 
 -- ============================================================
+-- TRIGGER: zwróć sprzęt gdy akcja jest zakończona/anulowana
+-- ============================================================
+
+CREATE OR REPLACE FUNCTION trigger_return_equipment_on_mission_close()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Gdy akcja zmienia status na completed lub cancelled:
+    -- 1. Ustaw returned_at na wszystkich aktywnych wypożyczeniach tej akcji
+    --    (trg_equipment_loan_status ustawi sprzęt na 'ready' przez łańcuch triggerów).
+    -- 2. Nadpisz status na 'maintenance' – sprzęt wymaga przeglądu przed kolejnym użyciem.
+    --    Pomijamy sprzęt retired/lost – ich statusu nie zmieniamy.
+    IF NEW.status IN ('completed', 'cancelled')
+       AND OLD.status NOT IN ('completed', 'cancelled') THEN
+
+        UPDATE equipment_loans
+        SET returned_at = COALESCE(NEW.end_time, CURRENT_TIMESTAMP)
+        WHERE mission_id = NEW.id
+          AND returned_at IS NULL;
+
+        UPDATE equipment
+        SET status = 'maintenance'
+        WHERE id IN (
+            SELECT equipment_id FROM equipment_loans WHERE mission_id = NEW.id
+        )
+        AND status NOT IN ('retired', 'lost');
+
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_return_equipment_on_mission_close
+AFTER UPDATE OF status ON missions
+FOR EACH ROW
+EXECUTE FUNCTION trigger_return_equipment_on_mission_close();
+
+-- ============================================================
 -- TRIGGER: zmień status sprzętu na 'in_use' po wypożyczeniu
 -- ============================================================
 
@@ -212,9 +249,24 @@ CREATE OR REPLACE FUNCTION trigger_equipment_loan_status()
 RETURNS TRIGGER AS $$
 BEGIN
     IF TG_OP = 'INSERT' THEN
+        -- Sprzęt wypożyczony → ustaw in_use
         UPDATE equipment SET status = 'in_use' WHERE id = NEW.equipment_id;
+
+    ELSIF TG_OP = 'UPDATE' THEN
+        -- Sprzęt zwrócony (returned_at ustawione przez aplikację)
+        IF OLD.returned_at IS NULL AND NEW.returned_at IS NOT NULL THEN
+            IF NOT EXISTS (
+                SELECT 1 FROM equipment_loans
+                WHERE equipment_id = NEW.equipment_id
+                  AND returned_at IS NULL
+                  AND id != NEW.id
+            ) THEN
+                UPDATE equipment SET status = 'ready' WHERE id = NEW.equipment_id;
+            END IF;
+        END IF;
+
     ELSIF TG_OP = 'DELETE' THEN
-        -- Sprawdź czy sprzęt nadal jest wypożyczony gdzie indziej
+        -- Wiersz usunięty fizycznie → sprawdź czy sprzęt nadal wypożyczony gdzie indziej
         IF NOT EXISTS (
             SELECT 1 FROM equipment_loans
             WHERE equipment_id = OLD.equipment_id
@@ -229,7 +281,7 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_equipment_loan_status
-AFTER INSERT OR DELETE ON equipment_loans
+AFTER INSERT OR UPDATE OR DELETE ON equipment_loans
 FOR EACH ROW
 EXECUTE FUNCTION trigger_equipment_loan_status();
 
@@ -293,21 +345,21 @@ INSERT INTO equipment (name, serial_number, type_id, status, last_inspection, se
 INSERT INTO missions (title, location, coordinates, incident_type_id, status, start_time, end_time, description, created_by) VALUES
     ('Upadek ze ściany - Rysy',
      'Rysy, szlak północny',
-     '49°11''20" N, 20°04''40" E',
+     '49.1889,20.0778',
      4, 'completed',
      '2024-10-27 14:22:00+02', '2024-10-27 18:45:00+02',
      'Turysta upadł z wysokości ok. 15m. Złamanie złożone nogi. Ewakuacja śmigłowcem.',
      1),
     ('Zaginięcie w Dolinie Pięciu Stawów',
      'Dolina Pięciu Stawów Polskich',
-     '49°10''30" N, 20°02''00" E',
+     '49.1750,20.0333',
      2, 'active',
      NOW() - INTERVAL '2 hours', NULL,
      'Grupa 3 turystów odłączyła się od szlaku. Sygnał GPS słaby.',
      1),
     ('Lawina - Zawrat',
      'Przełęcz Zawrat',
-     '49°13''10" N, 19°58''40" E',
+     '49.2194,19.9778',
      3, 'open',
      NOW() - INTERVAL '30 minutes', NULL,
      'Wysokie ryzyko lawiny na stoku północnym. Wstrzymano operacje szkoleniowe.',
@@ -320,14 +372,12 @@ INSERT INTO mission_rescuers (mission_id, user_id, role) VALUES
     (2, 2, 'rescuer'),
     (2, 4, 'rescuer');
 
--- Wypożyczenie sprzętu (trigger zmieni status na 'in_use')
+-- Wypożyczenie sprzętu dla zakończonej misji 1 (trigger zmieni status na 'in_use')
 INSERT INTO equipment_loans (mission_id, equipment_id, quantity) VALUES
     (1, 1, 1),
     (1, 4, 1),
-    (1, 6, 2),
-    (2, 2, 1),
-    (2, 5, 1);
+    (1, 6, 2);
 
--- Zakończ wypożyczenie dla misji 1 (zakończona)
+-- Zwróć sprzęt z misji 1 – trigger trg_equipment_loan_status ustawi status 'ready'
 UPDATE equipment_loans SET returned_at = '2024-10-27 18:45:00+02'
 WHERE mission_id = 1;
