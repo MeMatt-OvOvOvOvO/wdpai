@@ -1,3 +1,5 @@
+FROM composer:2 AS composer_bin
+
 FROM php:8.3.18RC1-fpm-alpine3.21
 
 ENV RUN_DEPS \
@@ -28,6 +30,8 @@ RUN apk add --no-cache --virtual .build-deps $BUILD_DEPS \
     && apk del .build-deps
 
 RUN apk add --no-cache --virtual .run-deps $RUN_DEPS
+
+COPY --from=composer_bin /usr/bin/composer /usr/local/bin/composer
 
 RUN echo 'memory_limit = -1' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini; \
     echo 'session.save_path = /tmp' >> /usr/local/etc/php/conf.d/docker-php-session.ini; \
