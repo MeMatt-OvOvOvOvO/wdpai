@@ -19,7 +19,18 @@ class DashboardController extends AppController
 
         $missionStats   = $this->missionRepo->getStats();
         $equipmentStats = $this->equipmentRepo->getStats();
-        $activeMissions = $this->missionRepo->getActiveMissions();
+
+        // Koordynator widzi wszystkie aktywne akcje, ratownik tylko swoje
+        $userId = (int)SessionService::get('user_id');
+        if (SessionService::isCoordinator()) {
+            $activeMissions = $this->missionRepo->getActiveMissions();
+        } else {
+            $allMyMissions  = $this->missionRepo->getMissionsForRescuer($userId);
+            $activeMissions = array_values(array_filter(
+                $allMyMissions,
+                fn($m) => in_array($m->getStatus(), ['active', 'open'])
+            ));
+        }
 
         // Aktywni ratownicy (przypisani do aktywnych akcji)
         $activeRescuersCount = 0;

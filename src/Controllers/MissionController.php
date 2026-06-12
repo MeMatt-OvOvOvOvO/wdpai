@@ -214,7 +214,10 @@ class MissionController extends AppController
     {
         SessionService::requireLogin();
 
-        $missions = $this->missionRepo->getAllMissions();
+        $userId   = (int)SessionService::get('user_id');
+        $missions = SessionService::isCoordinator()
+            ? $this->missionRepo->getAllMissions()
+            : $this->missionRepo->getMissionsForRescuer($userId);
         $data = array_map(fn(Mission $m) => [
             'id'               => $m->getId(),
             'title'            => $m->getTitle(),
