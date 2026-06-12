@@ -15,7 +15,11 @@ class MissionController extends AppController
     {
         SessionService::requireLogin();
 
-        $missions      = $this->missionRepo->getAllMissions();
+        $userId   = (int)SessionService::get('user_id');
+        $missions = SessionService::isCoordinator()
+            ? $this->missionRepo->getAllMissions()
+            : $this->missionRepo->getMissionsForRescuer($userId);
+
         $incidentTypes = $this->missionRepo->getIncidentTypes();
 
         $this->render('missions/index', [
@@ -80,6 +84,18 @@ class MissionController extends AppController
             http_response_code(404);
             $this->render('errors/404');
             return;
+        }
+
+        // Ratownik może widzieć tylko akcje, do których jest przypisany
+        if (!SessionService::isCoordinator()) {
+            $userId   = (int)SessionService::get('user_id');
+            $assigned = $this->missionRepo->getMissionRescuers($id);
+            $isAssigned = array_filter($assigned, fn($r) => (int)$r['user_id'] === $userId);
+            if (empty($isAssigned)) {
+                http_response_code(403);
+                $this->render('errors/403');
+                return;
+            }
         }
 
         $rescuers  = $this->missionRepo->getMissionRescuers($id);

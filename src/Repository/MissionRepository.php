@@ -21,6 +21,20 @@ class MissionRepository
         return array_map([$this, 'mapToEntity'], $stmt->fetchAll());
     }
 
+    /** @return Mission[] — tylko akcje, do których przypisany jest dany ratownik */
+    public function getMissionsForRescuer(int $userId): array
+    {
+        $stmt = $this->db->prepare('
+            SELECT m.*, it.name AS incident_type_name
+            FROM missions m
+            LEFT JOIN incident_types it ON m.incident_type_id = it.id
+            INNER JOIN mission_rescuers mr ON mr.mission_id = m.id AND mr.user_id = :user_id
+            ORDER BY m.start_time DESC
+        ');
+        $stmt->execute([':user_id' => $userId]);
+        return array_map([$this, 'mapToEntity'], $stmt->fetchAll());
+    }
+
     /** @return Mission[] */
     public function getActiveMissions(): array
     {
