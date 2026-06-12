@@ -165,6 +165,11 @@ class EquipmentController extends AppController
             $this->jsonError('Nieprawidłowe dane.', 400);
         }
 
+        $mission = $this->missionRepo->getMissionById($missionId);
+        if (!$mission || in_array($mission->getStatus(), ['completed', 'cancelled'])) {
+            $this->jsonError('Nie można dodać sprzętu do zakończonej lub anulowanej akcji.', 422);
+        }
+
         $result = $this->equipmentRepo->loanEquipmentToMission($missionId, $equipmentId, $quantity);
         $this->json(['success' => $result]);
     }

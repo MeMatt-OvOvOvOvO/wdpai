@@ -172,8 +172,15 @@ class MissionController extends AppController
         SessionService::requireCoordinator();
 
         $missionId = (int)($_GET['id'] ?? 0);
-        $userId    = (int)$this->getPost('user_id');
-        $role      = $this->getPost('role') ?: 'rescuer';
+        $mission   = $this->missionRepo->getMissionById($missionId);
+
+        if (!$mission || in_array($mission->getStatus(), ['completed', 'cancelled'])) {
+            SessionService::flash('error', 'Nie można modyfikować zakończonej lub anulowanej akcji.');
+            $this->redirect('/missions/' . $missionId);
+        }
+
+        $userId = (int)$this->getPost('user_id');
+        $role   = $this->getPost('role') ?: 'rescuer';
 
         if (!$userId) {
             SessionService::flash('error', 'Wybierz ratownika.');
@@ -190,8 +197,14 @@ class MissionController extends AppController
         SessionService::requireCoordinator();
 
         $missionId = (int)($_GET['id'] ?? 0);
-        $userId    = (int)$this->getPost('user_id');
+        $mission   = $this->missionRepo->getMissionById($missionId);
 
+        if (!$mission || in_array($mission->getStatus(), ['completed', 'cancelled'])) {
+            SessionService::flash('error', 'Nie można modyfikować zakończonej lub anulowanej akcji.');
+            $this->redirect('/missions/' . $missionId);
+        }
+
+        $userId = (int)$this->getPost('user_id');
         $this->missionRepo->removeRescuerFromMission($missionId, $userId);
         SessionService::flash('success', 'Ratownik został usunięty z akcji.');
         $this->redirect('/missions/' . $missionId);
