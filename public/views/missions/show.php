@@ -128,7 +128,7 @@ ob_start();
                 <?php endif; ?>
               </div>
             </div>
-            <?php if (SessionService::isCoordinator()): ?>
+            <?php if (SessionService::isCoordinator() && !in_array($mission->getStatus(), ['completed', 'cancelled'])): ?>
             <form method="POST" action="/missions/<?= $mission->getId() ?>/rescuers/remove" style="margin:0">
               <input type="hidden" name="user_id" value="<?= htmlspecialchars($r['user_id']) ?>">
               <button type="submit" class="btn btn--danger btn--sm" title="Usuń z akcji"
@@ -142,7 +142,7 @@ ob_start();
         </ul>
         <?php endif; ?>
 
-        <?php if (SessionService::isCoordinator()): ?>
+        <?php if (SessionService::isCoordinator() && !in_array($mission->getStatus(), ['completed', 'cancelled'])): ?>
         <form method="POST" action="/missions/<?= $mission->getId() ?>/rescuers" style="display:flex;flex-direction:column;gap:0.75rem">
           <div class="form-group" style="margin-bottom:0">
             <label class="form-label" for="rescuer_user_id">Dodaj ratownika</label>
@@ -200,7 +200,8 @@ ob_start();
         </ul>
         <?php endif; ?>
 
-        <!-- Dodaj sprzęt via Fetch API -->
+        <!-- Dodaj sprzęt via Fetch API – tylko dla aktywnych/otwartych akcji -->
+        <?php if (!in_array($mission->getStatus(), ['completed', 'cancelled'])): ?>
         <div id="addEquipResult" class="alert" style="display:none"></div>
         <form id="addEquipForm" data-mission-id="<?= $mission->getId() ?>"
               style="display:flex;flex-direction:column;gap:0.75rem">
@@ -222,6 +223,11 @@ ob_start();
             Dodaj
           </button>
         </form>
+        <?php else: ?>
+        <p style="font-size:0.75rem;color:var(--color-text-dim);text-align:center;padding:0.5rem 0">
+          Akcja zakończona — sprzęt jest tylko do odczytu.
+        </p>
+        <?php endif; ?>
       </div>
 
     </div>
